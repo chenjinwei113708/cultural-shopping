@@ -62,16 +62,16 @@ export default {
   },
   head() {
     return {
-      title: `${this.userInfo.username} - 个人中心  - boblog.com`,
+      title: `${this.userInfo.username} - 个人中心  - 民俗文化 - 在线购物`,
       meta: [
         {
           name: 'keywords',
           content:
-            '波波,博客,波波博客,梁凤波,bo,blog,boblog,前端开发工程师,前端性能优化,JavaScript,css,html',
+            '民俗，文化，文化推广,文创商品，民俗文化',
         },
         {
           name: 'description',
-          content: '波波博客 - BoBlog.com，专注于前端开发技术，前端性能优化！',
+          content: '民俗文化推荐网站，支持评论，在线购物',
         },
       ],
     }

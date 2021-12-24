@@ -1,7 +1,11 @@
-/**
- * @description 管理员的数据访问对象
- * @description Data Access Objects for Administrators
- * @author 梁凤波, Peter Liang
+/*
+ * @Author: chen
+ * @Date: 2021-11-28 22:29:58
+ * @LastEditTime: 2021-12-22 16:11:34
+ * @LastEditors: chen
+ * @Description: 管理员的数据访问对象
+ * @FilePath: \nodejs-koa-blog\app\dao\admin.js
+ * 
  */
 
 const { Admin } = require('@models/admin')
@@ -11,7 +15,6 @@ class AdminDao {
   // 创建用管理员
   static async create(params) {
     const { email, password, nickname } = params
-
     const hasAdmin = await Admin.findOne({
       where: {
         email,

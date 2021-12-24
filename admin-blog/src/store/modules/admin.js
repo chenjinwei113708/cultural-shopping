@@ -1,3 +1,12 @@
+/*
+ * @Author: chen
+ * @Date: 2021-11-28 22:29:58
+ * @LastEditTime: 2021-12-22 21:03:22
+ * @LastEditors: chen
+ * @Description:
+ * @FilePath: \admin-blog\src\store\modules\admin.js
+ *
+ */
 import { login, getInfo } from '@/api/admin'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'

@@ -1,6 +1,11 @@
-/**
- * @description 用户的路由 API 接口
- * @author 梁凤波, Peter Liang
+/*
+ * @Author: chen
+ * @Date: 2021-11-28 22:29:58
+ * @LastEditTime: 2021-12-22 14:44:08
+ * @LastEditors: chen
+ * @Description: 用户的路由 API 接口
+ * @FilePath: \nodejs-koa-blog\app\api\v1\user.js
+ * 
  */
 
 const Router = require('koa-router')

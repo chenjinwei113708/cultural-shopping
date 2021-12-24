@@ -2,7 +2,8 @@
   <div>
     <div class="header">
       <div class="logo" @click="jumpURL('/')">
-        <img src="https://cdn.boblog.com/logo.png" alt="logo" />
+        <!-- <img src="https://cdn.boblog.com/logo.png" alt="logo" /> -->
+        <img src="@/static/logo.png" alt="logo" />
       </div>
       <div class="nav">
         <div
@@ -13,9 +14,6 @@
         >
           {{ item.title }}
         </div>
-        <a href="https://github.com/lfb" target="_blank" class="nav-item">
-          Github
-        </a>
       </div>
       <div class="search" @click="showSearch = true">
         <img src="https://cdn.boblog.com/search.png" alt="search" />

@@ -1,7 +1,11 @@
-/**
- * @description 分类的路由 API 接口
- * @description Category's routing API interface
- * @author 梁凤波, Peter Liang
+/*
+ * @Author: chen
+ * @Date: 2021-11-28 22:29:58
+ * @LastEditTime: 2021-12-22 14:44:08
+ * @LastEditors: chen
+ * @Description: 分类的路由 API 接口
+ * @FilePath: \nodejs-koa-blog\app\api\v1\category.js
+ * 
  */
 
 const Router = require('koa-router');

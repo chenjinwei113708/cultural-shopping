@@ -1,8 +1,17 @@
+<!--
+ * @Author: chen
+ * @Date: 2021-11-28 22:29:58
+ * @LastEditTime: 2021-12-23 22:33:55
+ * @LastEditors: chen
+ * @Description: footer
+ * @FilePath: \frontend-boblog\components\common\Footer.vue
+ * 
+-->
 <template>
   <div class="footer">
     <div class="site">
-      <span>© 波波博客 - BoBlog.com</span>
-      <span>itbo@163.com</span>
+      <span>南风社区</span>
+      <span>nangfengcloud.xyz</span>
     </div>
     <div class="copyright">
       <a
@@ -10,7 +19,7 @@
         href="https://beian.miit.gov.cn"
         target="_blank"
       >
-        粤ICP备2020120493号
+        粤ICP备2021xxxxxxxx号
       </a>
     </div>
   </div>

@@ -1,7 +1,16 @@
+/*
+ * @Author: chen
+ * @Date: 2021-11-28 22:29:58
+ * @LastEditTime: 2021-12-23 21:35:42
+ * @LastEditors: chen
+ * @Description: 用户表模型
+ * @FilePath: \nodejs-koa-blog\app\models\user.js
+ * 
+ */
 const moment = require('moment');
-const bcrypt = require('bcryptjs')
-const { sequelize } = require('@core/db')
-const { DataTypes, Model } = require('sequelize')
+const bcrypt = require('bcryptjs');
+const { sequelize } = require('@core/db');
+const { DataTypes, Model } = require('sequelize');
 
 // 定义用户模型
 class User extends Model {
@@ -57,7 +66,6 @@ User.init({
     modelName: 'user',
     tableName: 'user'
 })
-
 
 module.exports = {
     User

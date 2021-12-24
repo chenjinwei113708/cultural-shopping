@@ -1,9 +1,12 @@
-/**
- * @description 管理员的路由 API 接口
- * @description Administrator's routing API interface
- * @author 梁凤波, Peter Liang
+/*
+ * @Author: chen
+ * @Date: 2021-11-28 22:29:58
+ * @LastEditTime: 2021-12-22 16:14:37
+ * @LastEditors: chen
+ * @Description: 管理员的路由 API 接口
+ * @FilePath: \nodejs-koa-blog\app\api\v1\admin.js
+ * 
  */
-
 const Router = require('koa-router')
 
 const {

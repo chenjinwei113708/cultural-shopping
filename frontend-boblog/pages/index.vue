@@ -49,7 +49,7 @@ export default {
       is_category: 1,
       is_admin: 1,
     })
-
+    
     if (!err) {
       const isLoad = res.data.data.meta.total_pages > page
       return {
@@ -66,16 +66,16 @@ export default {
   },
   head() {
     return {
-      title: '波波博客 - boblog.com - 技术博客',
+      title: '民俗文化 - 在线购物',
       meta: [
         {
           name: 'keywords',
           content:
-            '波波,博客,波波博客,梁凤波,bo,blog,boblog,前端开发工程师,前端性能优化,JavaScript,css,html',
+            '民俗，文化，文化推广,文创商品，民俗文化',
         },
         {
           name: 'description',
-          content: '波波博客 - BoBlog.com，专注于前端开发技术，前端性能优化！',
+          content: '民俗文化推荐网站，支持评论，在线购物',
         },
       ],
     }
@@ -101,7 +101,7 @@ export default {
         is_category: 1,
         is_admin: 1,
         page: this.page,
-      })
+      });
       if (!err) {
         this.categoryId = id
         this.article.push(...res.data.data)

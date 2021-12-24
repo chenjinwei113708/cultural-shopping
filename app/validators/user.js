@@ -32,7 +32,7 @@ class RegisterValidator extends LinValidator {
       }),
     ]
   }
-
+// 我们把 validate 开头的类方法称之为 规则函数，我们会在校验的时候自动地调用这些规则函数
   validatePassword(vals) {
     const psw1 = vals.body.password1
     const psw2 = vals.body.password2

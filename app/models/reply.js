@@ -1,8 +1,18 @@
-const moment = require('moment');
+/*
+ * @Author: chen
+ * @Date: 2021-11-28 22:29:58
+ * @LastEditTime: 2021-12-24 10:31:14
+ * @LastEditors: chen
+ * @Description: 评论表模型
+ * @FilePath: \nodejs-koa-blog\app\models\reply.js
+ * 
+ */
 
-const { DataTypes, Model } = require('sequelize')
-const { sequelize } = require('@core/db')
-// const { Comment } = require('@models/comment')
+const moment = require('moment');
+const { DataTypes, Model } = require('sequelize');
+const { sequelize } = require('@core/db');
+const { Comment } = require('@models/comment')
+// const { Comment } = require('@models/comment');
 
 class Reply extends Model {
 
@@ -68,17 +78,18 @@ Reply.init({
 })
 
 // 一对多：评论表下拥有多个评论
-// Comment.hasMany(Reply, {
-//   foreignKey: 'comment_id',
-//   sourceKey: 'id',
-//   as: 'reply'
-// })
+
+Comment.hasMany(Reply, {
+  foreignKey: 'comment_id',
+  sourceKey: 'id',
+  as: 'reply'
+})
 //
-// Reply.belongsTo(Comment, {
-//   foreignKey: 'comment_id',
-//   targetKey: 'id',
-//   as: 'comment'
-// })
+Reply.belongsTo(Comment, {
+  foreignKey: 'comment_id',
+  targetKey: 'id',
+  as: 'comment'
+})
 
 module.exports = {
   Reply

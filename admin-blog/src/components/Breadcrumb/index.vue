@@ -1,3 +1,12 @@
+<!--
+ * @Author: chen
+ * @Date: 2021-11-28 22:29:58
+ * @LastEditTime: 2021-12-22 21:13:37
+ * @LastEditors: chen
+ * @Description:
+ * @FilePath: \admin-blog\src\components\Breadcrumb\index.vue
+ *
+-->
 <template>
   <el-breadcrumb class="app-breadcrumb" separator="/">
     <transition-group name="breadcrumb">
@@ -38,7 +47,7 @@ export default {
       const first = matched[0]
 
       if (!this.isDashboard(first)) {
-        matched = [{ path: '/dashboard', meta: { title: 'Dashboard' }}].concat(
+        matched = [{ path: '/dashboard', meta: { title: '控制面板' }}].concat(
           matched
         )
       }
