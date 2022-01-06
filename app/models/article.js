@@ -1,3 +1,12 @@
+/*
+ * @Author: chen
+ * @Date: 2021-12-24 15:13:42
+ * @LastEditTime: 2022-01-03 21:52:33
+ * @LastEditors: chen
+ * @Description: 
+ * @FilePath: \cultural-shopping\app\models\article.js
+ * 
+ */
 const moment = require('moment');
 const { sequelize } = require('@core/db')
 const { Model, DataTypes } = require('sequelize')
@@ -57,11 +66,17 @@ Article.init({
     defaultValue: 0,
     comment: '文章浏览次数'
   },
-  favorite_num: {
+  like_num: {
     type: DataTypes.INTEGER(10).UNSIGNED,
     allowNull: true,
-    defaultValue: 0,
+    defaultValue: 2,
     comment: '文章点赞次数'
+  },
+  star_num: {
+    type: DataTypes.INTEGER(10).UNSIGNED,
+    allowNull: true,
+    defaultValue: 2,
+    comment: '文章收藏次数'
   },
   admin_id: {
     type: DataTypes.INTEGER(10).UNSIGNED,
@@ -72,6 +87,16 @@ Article.init({
     type: DataTypes.INTEGER(10).UNSIGNED,
     allowNull: false,
     comment: '分类id'
+  },
+  address: {
+    type: DataTypes.STRING(128),
+    allowNull: false,
+    comment: '详细地址'
+  },
+  address_point: {
+    type: DataTypes.STRING(128),
+    allowNull: false,
+    comment: '详细经纬度'
   },
   created_at: {
     type: DataTypes.DATE,

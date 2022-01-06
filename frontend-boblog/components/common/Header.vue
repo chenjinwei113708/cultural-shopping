@@ -2,7 +2,6 @@
   <div>
     <div class="header">
       <div class="logo" @click="jumpURL('/')">
-        <!-- <img src="https://cdn.boblog.com/logo.png" alt="logo" /> -->
         <img src="@/static/logo.png" alt="logo" />
       </div>
       <div class="nav">
@@ -92,6 +91,7 @@ export default {
       this.keyword = ''
       this.showSearch = false
     },
+    // 动态增加/减少个人中心
     handleNav() {
       if (this.isLoginStatus) {
         this.nav.splice(2, 0, {

@@ -54,11 +54,11 @@ class ReplyDao {
   }
 
   // 获取回复详情
-  static async detail(id) {
+  static async detail(user_id) {
     try {
       const reply = await Reply.scope('iv').findOne({
         where: {
-          id,
+          user_id,
           deleted_at: null
         },
         attributes: {
@@ -76,8 +76,8 @@ class ReplyDao {
   }
 
   // 更新回复
-  static async update(id, v) {
-    const reply = await Reply.findByPk(id);
+  static async update(user_id, v) {
+    const reply = await Reply.findByPk(user_id);
     if (!reply) {
       throw new global.errs.NotFound('没有找到相关回复信息');
     }
@@ -161,14 +161,14 @@ class ReplyDao {
     const scope = 'bh'
     const finner = {
       where: {
-        id: {}
+        user_id: {}
       }
       // attributes: ['id', 'title']
     }
     const isArrayIds = isArray(ids)
     // 如果ids是数组，则使用 Op.in 查询
     if (isArrayIds) {
-      finner.where.id = {
+      finner.where.user_id = {
         [Op.in]: ids
       }
     } else if (ids) {
@@ -184,7 +184,7 @@ class ReplyDao {
       if (isArrayIds) {
         const user = {}
         res.forEach(item => {
-          user[item.id] = item
+          user[item.user_id] = item
         })
         return [null, user]
       }
@@ -206,13 +206,13 @@ class ReplyDao {
    * @returns 新的评论数据
    * @private
    */
-  static setReplyByDataValue(reply, data = {}, id = 'id', key = 'key') {
+  static setReplyByDataValue(reply, data = {}, user_id = 'user_id', key = 'key') {
     // 处理数组和对象的情况
     if (isArray(reply)) {
       // 查询数据列表的id是否有匹配的 map key: 如 reply[replyItem.id]
       // 有直接赋值，反之默认数组
       reply.forEach(replyItem => {
-        replyItem.setDataValue(key, data[replyItem[id]] || null)
+        replyItem.setDataValue(key, data[replyItem[user_id]] || null)
       })
     } else {
       reply.setDataValue(key, data)

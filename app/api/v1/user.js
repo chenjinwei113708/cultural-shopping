@@ -1,10 +1,10 @@
 /*
  * @Author: chen
  * @Date: 2021-11-28 22:29:58
- * @LastEditTime: 2021-12-22 14:44:08
+ * @LastEditTime: 2022-01-04 00:14:09
  * @LastEditors: chen
  * @Description: 用户的路由 API 接口
- * @FilePath: \nodejs-koa-blog\app\api\v1\user.js
+ * @FilePath: \cultural-shopping\app\api\v1\user.js
  * 
  */
 
@@ -35,22 +35,23 @@ router.post('/register', async (ctx) => {
     const v = await new RegisterValidator().validate(ctx);
     const email = v.get('body.email');
     const password = v.get('body.password2');
+    const username = v.get('body.username');
 
     // 创建用户
     const [err, data] = await UserDao.create({
         password,
         email,
-        username: v.get('body.username')
+        username
     });
 
     if (!err) {
-        const [errToken, token, id] = await LoginManager.userLogin({
+        const [errToken, token, user_id] = await LoginManager.userLogin({
             email,
             password
         });
         if (!errToken) {
             data.token = token
-            data.id = id
+            data.user_id = user_id
         }
         // 返回结果
         ctx.response.status = 200;
@@ -67,13 +68,13 @@ router.post('/login', async (ctx) => {
 
     const v = await new UserLoginValidator().validate(ctx);
 
-    let [err, token, id] = await LoginManager.userLogin({
+    let [err, token, user_id] = await LoginManager.userLogin({
         email: v.get('body.email'),
         password: v.get('body.password')
     });
 
     if (!err) {
-        let [err, data] = await UserDao.detail(id);
+        let [err, data] = await UserDao.detail(user_id);
         if (!err) {
             data.setDataValue('token', token)
             ctx.response.status = 200;
@@ -82,15 +83,16 @@ router.post('/login', async (ctx) => {
     } else {
         ctx.body = res.fail(err, err.msg);
     }
+    // ctx.body = res.json(err);
 });
 
 // 获取用户信息
 router.get('/auth', new Auth(AUTH_USER).m, async (ctx) => {
     // 获取用户ID
-    const id = ctx.auth.uid;
+    const user_id = ctx.auth.uid;
 
     // 查询用户信息
-    let [err, data] = await UserDao.detail(id, 1);
+    let [err, data] = await UserDao.detail(user_id, 1);
     if (!err) {
         ctx.response.status = 200;
         ctx.body = res.json(data)
@@ -116,12 +118,12 @@ router.get('/list', new Auth(AUTH_ADMIN).m, async (ctx) => {
 
 // 获取用户信息
 // 需要管理员及以上才能操作
-router.get('/detail/:id', new Auth(AUTH_USER).m, async (ctx) => {
+router.get('/detail/:user_id', new Auth(AUTH_USER).m, async (ctx) => {
     // 获取用户ID
     const v = await new PositiveIdParamsValidator().validate(ctx);
-    const id = v.get('path.id');
+    const user_id = v.get('path.user_id');
     // 查询用户信息
-    let [err, data] = await UserDao.detail(id);
+    let [err, data] = await UserDao.detail(user_id);
     if (!err) {
         ctx.response.status = 200;
         ctx.body = res.json(data)
@@ -131,16 +133,16 @@ router.get('/detail/:id', new Auth(AUTH_USER).m, async (ctx) => {
 })
 
 
-// 获取用户列表
+// 删除某个用户信息
 // 需要管理员及以上才能操作
-router.delete('/delete/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
+router.delete('/delete/:user_id', new Auth(AUTH_ADMIN).m, async (ctx) => {
     // 通过验证器校验参数是否通过
     const v = await new PositiveIdParamsValidator().validate(ctx);
 
     // 获取用户ID参数
-    const id = v.get('path.id');
+    const user_id = v.get('path.user_id');
     // 删除用户
-    const [err, data] = await UserDao.destroy(id);
+    const [err, data] = await UserDao.destroy(user_id);
     if (!err) {
         ctx.response.status = 200;
         ctx.body = res.success('删除用户成功');
@@ -151,17 +153,16 @@ router.delete('/delete/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
 
 // 获取更新用户信息
 // 需要管理员及以上才能操作
-router.put('/update/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
+router.put('/update/:user_id', async (ctx) => {
     // 通过验证器校验参数是否通过
     const v = await new PositiveIdParamsValidator().validate(ctx);
-
     // 获取用户ID参数
-    const id = v.get('path.id');
-    // 删除用户
-    const [err, data] = await UserDao.update(id, v);
+    const user_id = v.get('body.user_id');
+    // 更新用户
+    const [err, data] = await UserDao.update(user_id, v);
     if (!err) {
         ctx.response.status = 200;
-        ctx.body = res.success('更新用户成功');
+        ctx.body = res.json(data)
     } else {
         ctx.body = res.fail(err);
     }

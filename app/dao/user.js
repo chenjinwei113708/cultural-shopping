@@ -8,7 +8,7 @@ const { User } = require('@models/user')
 const bcrypt = require('bcryptjs')
 
 class UserDao {
-  // 创建用用户
+  // 创建用户
   static async create(params) {
     const { email, password, username } = params
     const hasUser = await User.findOne({
@@ -69,11 +69,11 @@ class UserDao {
   }
 
   // 查询用户信息
-  static async detail(id, status) {
+  static async detail(user_id, status) {
     try {
       const scope = 'bh';
       const filter = {
-        id
+        user_id
       }
       if(status) {
         filter.status = status
@@ -114,22 +114,29 @@ class UserDao {
   }
 
   // 更新用户
-  static async update(id, v) {
+  static async update(user_id, v) {
     // 查询用户
-    const user = await User.findByPk(id);
+    const user = await User.findByPk(user_id);
     if (!user) {
       throw new global.errs.NotFound('没有找到相关用户');
     }
-
+    if(v.get('body.like')) {
+      user.like = v.get('body.like');
+    } else if(v.get('body.star')) {
+      user.star = v.get('body.star');
+    } else {
     // 更新用户
-      user.email = v.get('body.email')
-      user.username = v.get('body.username')
-      user.status = v.get('body.status')
-
+    user.email = v.get('body.email')
+    user.username = v.get('body.username')
+    user.status = v.get('body.status')
+    }
+    // console.log('user',user)
     try {
       const res = await user.save();
+      // console.log('success')
       return [null, res]
     } catch (err) {
+      // console.log('error')
       return [err, null]
     }
   }

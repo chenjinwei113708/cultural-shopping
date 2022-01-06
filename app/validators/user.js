@@ -88,7 +88,7 @@ class TokenNotEmptyValidator extends LinValidator {
 class PositiveIdParamsValidator extends LinValidator {
   constructor() {
     super();
-    this.id = [
+    this.user_id = [
       new Rule('isInt', '用户ID需要正整数', { min: 1 })
     ]
   }

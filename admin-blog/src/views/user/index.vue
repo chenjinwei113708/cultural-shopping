@@ -9,7 +9,7 @@
       >
         <el-form-item label="用户ID" prop="id">
           <el-input
-            v-model.trim="searchForm.id"
+            v-model.trim="searchForm.user_id"
             placeholder="用户ID"
             class="input"
             clearable
@@ -58,7 +58,7 @@
       >
         <el-table-column label="ID" width="80" align="center">
           <template slot-scope="scope">
-            {{ scope.row.id }}
+            {{ scope.row.user_id }}
           </template>
         </el-table-column>
         <el-table-column label="用户名称" align="center">
@@ -83,12 +83,12 @@
             <el-button
               size="mini"
               type="primary"
-              @click="handleEdit(scope.row.id)"
+              @click="handleEdit(scope.row.user_id)"
             >编辑</el-button>
             <el-button
               size="mini"
               type="danger"
-              @click="handleDelete(scope.row.id)"
+              @click="handleDelete(scope.row.user_id)"
             >删除</el-button>
           </template>
         </el-table-column>
@@ -134,7 +134,7 @@ export default {
       listLoading: true,
       count: 0,
       searchForm: {
-        id: '',
+        user_id: '',
         username: '',
         status: '',
         page: 1
@@ -159,11 +159,11 @@ export default {
       }
     },
     // 跳转编辑
-    handleEdit(id) {
-      this.$router.push('/user/edit?id=' + id)
+    handleEdit(user_id) {
+      this.$router.push('/user/edit?user_id=' + user_id)
     },
     // 删除用户
-    handleDelete(id) {
+    handleDelete(user_id) {
       try {
         this.$msgbox
           .confirm('确定需要删除这个用户吗', '提示', {
@@ -172,7 +172,7 @@ export default {
             type: 'error'
           })
           .then(async() => {
-            const r = await deleteUser({ id })
+            const r = await deleteUser({ user_id })
             this.$message.success(r.msg)
             await this.fetchData()
           })

@@ -1,10 +1,10 @@
 /*
  * @Author: chen
  * @Date: 2021-11-28 22:29:58
- * @LastEditTime: 2021-12-22 15:25:22
+ * @LastEditTime: 2022-01-06 10:22:00
  * @LastEditors: chen
  * @Description: 
- * @FilePath: \nodejs-koa-blog\frontend-boblog\request\http.js
+ * @FilePath: \frontend-boblog\request\http.js
  * 
  */
 import service from '~/request/request.js'
@@ -36,6 +36,18 @@ export function POST(config) {
         .catch(err => {
             return [err, null]
         })
+}
+
+export function PUT(config) {
+    const { url = '', data = {}, ...opt } = config
+    return service
+    .put(url, data, opt)
+    .then(res => {
+        return [null, res]
+    })
+    .catch(err => {
+        return [err, null]
+    })
 }
 
 export function UPLOAD(config) {

@@ -57,9 +57,11 @@ export default {
       userInfo: (state) => state.user.userInfo,
     }),
   },
+  // eslint-disable-next-line vue/order-in-components
   async fetch({ store }) {
-    await store.dispatch('category/getCategoryData')
+    await store.dispatch('category/getCategoryData');
   },
+  // eslint-disable-next-line vue/order-in-components
   head() {
     return {
       title: `${this.userInfo.username} - 个人中心  - 民俗文化 - 在线购物`,

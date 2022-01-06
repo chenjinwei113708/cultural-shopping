@@ -42,7 +42,7 @@ export default {
   data() {
     return {
       ruleForm: {
-        id: this.$route.query.id,
+        user_id: this.$route.query.user_id,
         username: '',
         email: 1,
         status: 1
@@ -74,7 +74,7 @@ export default {
     async getUser() {
       try {
         const res = await userInfo({
-          id: this.$route.query.id
+          user_id: this.$route.query.user_id
         })
         this.ruleForm.username = res.data.username
         this.ruleForm.status = res.data.status

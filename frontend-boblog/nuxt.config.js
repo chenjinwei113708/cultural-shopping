@@ -1,10 +1,10 @@
 /*
  * @Author: chen
  * @Date: 2021-11-28 22:29:58
- * @LastEditTime: 2021-12-14 10:02:32
+ * @LastEditTime: 2021-12-25 20:37:16
  * @LastEditors: chen
  * @Description: 
- * @FilePath: \frontend-boblog\nuxt.config.js
+ * @FilePath: \cultural-shopping\frontend-boblog\nuxt.config.js
  * 
  */
 /* eslint-disable nuxt/no-cjs-in-config */

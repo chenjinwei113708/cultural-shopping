@@ -1,10 +1,10 @@
 /*
  * @Author: chen
  * @Date: 2021-11-28 22:29:58
- * @LastEditTime: 2021-12-23 21:35:42
+ * @LastEditTime: 2022-01-04 10:08:02
  * @LastEditors: chen
  * @Description: 用户表模型
- * @FilePath: \nodejs-koa-blog\app\models\user.js
+ * @FilePath: \cultural-shopping\app\models\user.js
  * 
  */
 const moment = require('moment');
@@ -19,7 +19,7 @@ class User extends Model {
 
 // 初始用户模型
 User.init({
-    id: {
+    user_id: {
         type: DataTypes.INTEGER(10).UNSIGNED,
         primaryKey: true,
         autoIncrement: true
@@ -60,6 +60,18 @@ User.init({
         get() {
             return moment(this.getDataValue('created_at')).format('YYYY-MM-DD HH:mm:ss');
         }
+    },
+    star: {
+        type: DataTypes.STRING(128),
+        allowNull: true,
+        defaultValue: '0',
+        comment: '收藏'
+    },
+    like: {
+        type: DataTypes.STRING(128),
+        allowNull: true,
+        defaultValue: '0',
+        comment: '点赞/喜欢'
     }
 }, {
     sequelize,

@@ -1,7 +1,7 @@
 <!--
  * @Author: chen
  * @Date: 2021-11-28 22:29:58
- * @LastEditTime: 2021-12-23 22:33:55
+ * @LastEditTime: 2022-01-06 11:05:36
  * @LastEditors: chen
  * @Description: footer
  * @FilePath: \frontend-boblog\components\common\Footer.vue
@@ -19,7 +19,7 @@
         href="https://beian.miit.gov.cn"
         target="_blank"
       >
-        粤ICP备2021xxxxxxxx号
+        粤ICP备2022000180号
       </a>
     </div>
   </div>

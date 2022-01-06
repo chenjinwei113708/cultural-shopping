@@ -152,7 +152,8 @@ export default {
     },
   },
   mounted() {
-    this.getComment()
+    this.getComment();
+    // console.log('test',this.userInfo);
   },
   methods: {
     handleClose() {

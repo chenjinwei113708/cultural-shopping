@@ -1,3 +1,12 @@
+/*
+ * @Author: chen
+ * @Date: 2021-12-24 15:13:42
+ * @LastEditTime: 2021-12-25 10:44:55
+ * @LastEditors: chen
+ * @Description: 
+ * @FilePath: \cultural-shopping\app\api\v1\reply.js
+ * 
+ */
 const Router = require('koa-router')
 
 const { ReplyDao } = require('@dao/reply')
@@ -31,13 +40,13 @@ router.post('/reply', async (ctx) => {
 })
 
 // 删除回复
-router.delete('/reply/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
+router.delete('/reply/:user_id', new Auth(AUTH_ADMIN).m, async (ctx) => {
   // 通过验证器校验参数是否通过
   const v = await new PositiveArticleIdParamsValidator().validate(ctx);
 
   // 获取分类ID参数
-  const id = v.get('path.id');
-  const [err, data] = await ReplyDao.destroy(id);
+  const user_id = v.get('path.user_id');
+  const [err, data] = await ReplyDao.destroy(user_id);
   if (!err) {
     // 返回结果
     ctx.response.status = 200;
@@ -78,13 +87,13 @@ router.get('/reply', async (ctx) => {
 })
 
 // 获取回复详情
-router.get('/reply/:id', async (ctx) => {
+router.get('/reply/:user_id', async (ctx) => {
   // 通过验证器校验参数是否通过
   const v = await new PositiveArticleIdParamsValidator().validate(ctx);
 
   // 获取分类ID参数
-  const id = v.get('path.id');
-  const [err, data] = await ReplyDao.detail(id)
+  const user_id = v.get('path.user_id');
+  const [err, data] = await ReplyDao.detail(user_id)
 
   if (!err) {
     // 返回结果

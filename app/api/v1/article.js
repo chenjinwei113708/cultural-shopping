@@ -81,7 +81,7 @@ router.delete('/article/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
 /**
  * 更新文章
  */
-router.put('/article/:id', new Auth(AUTH_ADMIN).m, async (ctx) => {
+router.put('/article/:id', async (ctx) => {
   // 通过验证器校验参数是否通过
   const v = await new PositiveIdParamsValidator().validate(ctx);
 

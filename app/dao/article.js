@@ -37,7 +37,9 @@ class ArticleDao {
     article.sort_order = v.get('body.sort_order');
     article.admin_id = v.get('body.admin_id');
     article.category_id = v.get('body.category_id');
-
+    article.address = v.get('body.address');
+    article.address_point = v.get('body.address_point');
+    
     try {
       const res = await article.save();
       return [null, res]
@@ -123,7 +125,7 @@ class ArticleDao {
   // 获取文章列表
   static async list(params = {}) {
     const { category_id, keyword, page_size = 10, status, page = 1 } = params;
-    console.log('page', category_id)
+    // console.log('page', category_id)
 
     // 筛选方式
     let filter = {
@@ -156,14 +158,12 @@ class ArticleDao {
       });
 
       let rows = article.rows
-
       // 处理分类
       const categoryIds = unique(rows.map(item => item.category_id))
       const [categoryError, dataAndCategory] = await ArticleDao._handleCategory(rows, categoryIds)
       if (!categoryError) {
         rows = dataAndCategory
       }
-
       // 处理创建人
       const adminIds = unique(rows.map(item => item.admin_id))
       const [userError, dataAndAdmin] = await ArticleDao._handleAdmin(rows, adminIds)
@@ -182,7 +182,6 @@ class ArticleDao {
           total_pages: Math.ceil(article.count / 10),
         }
       }
-
       return [null, data]
     } catch (err) {
       return [err, null]
@@ -221,17 +220,25 @@ class ArticleDao {
     if (!article) {
       throw new global.errs.NotFound('没有找到相关文章');
     }
+    if(v.get('body.like_num')) {
+      article.like_num = v.get('body.like_num');
+    } else if(v.get('body.star_num')) {
+      article.star_num = v.get('body.star_num');
 
-    // 更新文章
-    article.title = v.get('body.title');
-    article.description = v.get('body.description');
-    article.img_url = v.get('body.img_url');
-    article.content = v.get('body.content');
-    article.seo_keyword = v.get('body.seo_keyword');
-    article.status = v.get('body.status');
-    article.sort_order = v.get('body.sort_order');
-    article.admin_id = v.get('body.admin_id');
-    article.category_id = v.get('body.category_id');
+    } else {
+      // 更新文章
+      article.title = v.get('body.title');
+      article.description = v.get('body.description');
+      article.img_url = v.get('body.img_url');
+      article.content = v.get('body.content');
+      article.seo_keyword = v.get('body.seo_keyword');
+      article.status = v.get('body.status');
+      article.sort_order = v.get('body.sort_order');
+      article.admin_id = v.get('body.admin_id');
+      article.category_id = v.get('body.category_id');
+      article.address = v.get('body.address');
+      article.address_point = v.get('body.address_point');
+    }
 
     try {
       const res = await article.save();
@@ -259,6 +266,41 @@ class ArticleDao {
     }
   }
 
+  // 更新文章点赞次数
+  static async updateLike(id, like_num) {
+    // 查询文章
+    const article = await Article.findByPk(id);
+    if (!article) {
+      throw new global.errs.NotFound('没有找到相关文章');
+    }
+    // 更新文章点赞
+    article.like_num = like_num;
+
+    try {
+      const res = await article.save();
+      return [null, res]
+    } catch (err) {
+      return [err, null]
+    }
+  }
+
+  // 更新文章收藏次数
+  static async updateStar(id, star_num) {
+    // 查询文章
+    const article = await Article.findByPk(id);
+    if (!article) {
+      throw new global.errs.NotFound('没有找到相关文章');
+    }
+    // 更新文章收藏
+    article.star_num = star_num;
+
+    try {
+      const res = await article.save();
+      return [null, res]
+    } catch (err) {
+      return [err, null]
+    }
+  }
   // 文章详情
   static async detail(id, query) {
     const { keyword } = query

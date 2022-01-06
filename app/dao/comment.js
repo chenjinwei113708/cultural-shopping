@@ -389,19 +389,19 @@ class CommentDao {
     const scope = 'bh'
     const finner = {
       where: {
-        id: {}
+        user_id: {}
       }
       // attributes: ['id', 'title']
     }
     const isArrayIds = isArray(ids)
     // 如果ids是数组，则使用 Op.in 查询
     if (isArrayIds) {
-      finner.where.id = {
+      finner.where.user_id = {
         [Op.in]: ids
       }
     } else if (ids) {
       // 反之id索引查询
-      finner.where.id = ids
+      finner.where.user_id = ids
     }
 
     try {
@@ -412,7 +412,7 @@ class CommentDao {
       if (isArrayIds) {
         const user = {}
         res.forEach(item => {
-          user[item.id] = item
+          user[item.user_id] = item
         })
         return [null, user]
       }

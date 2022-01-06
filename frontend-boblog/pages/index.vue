@@ -17,8 +17,13 @@
           <h1 class="article-title">
             {{ item.title }}
           </h1>
-          <div class="article-create">
-            {{ item.created_at }}
+          <div class="article-create-browse">
+            <div class="article-create">
+              {{ item.created_at }}
+            </div>
+            <div class="article-browse">
+              阅读({{ item.browse }})
+            </div>
           </div>
         </div>
       </div>
@@ -33,14 +38,13 @@
   </div>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import { getArticleList } from '@/request/api/article'
 
 export default {
   async asyncData(context) {
     // eslint-disable-next-line camelcase
     const { id, keyword, category_id, page = 1 } = context.query
-
     const [err, res] = await getArticleList({
       id,
       category_id,
@@ -49,7 +53,6 @@ export default {
       is_category: 1,
       is_admin: 1,
     })
-    
     if (!err) {
       const isLoad = res.data.data.meta.total_pages > page
       return {
@@ -82,7 +85,7 @@ export default {
   },
   computed: {
     ...mapState({
-      categoryList: (state) => state.category.categoryList,
+      categoryList: (state) => state.category.categoryList
     }),
     // 是否为空数据
     isEmptyData() {
@@ -94,6 +97,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions(['getArticleListData']),
     // 获取新数据
     async fetchData(id) {
       const [err, res] = await getArticleList({
@@ -122,6 +126,19 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@font-face {
+  font-family: 'iconfont';  /* Project id 3062722 */
+  src: url('//at.alicdn.com/t/font_3062722_5pyyp0e4yuf.woff2?t=1640788190437') format('woff2'),
+       url('//at.alicdn.com/t/font_3062722_5pyyp0e4yuf.woff?t=1640788190437') format('woff'),
+       url('//at.alicdn.com/t/font_3062722_5pyyp0e4yuf.ttf?t=1640788190437') format('truetype');
+}
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 30px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 .clear-refresh {
   margin-top: 16px;
   text-align: center;
@@ -176,7 +193,14 @@ export default {
   color: #222222;
   line-height: 22px;
 }
-.article-create {
+// .article-create {
+  
+// }
+.article-create-browse {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
   height: 20px;
   font-size: 14px;
   font-weight: 400;
@@ -184,7 +208,10 @@ export default {
   line-height: 20px;
   margin-top: 8px;
 }
-
+.article-browse:before {
+    content: "\e63a";
+    font-family: "iconfont";
+}
 .more {
   cursor: pointer;
   width: 1280px;

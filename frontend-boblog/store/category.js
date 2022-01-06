@@ -1,3 +1,12 @@
+/*
+ * @Author: chen
+ * @Date: 2021-12-24 15:13:42
+ * @LastEditTime: 2022-01-02 15:26:41
+ * @LastEditors: chen
+ * @Description: 分类信息管理
+ * @FilePath: \frontend-boblog\store\category.js
+ * 
+ */
 import { getCategory } from '@/request/api/category'
 const state = () => ({
   categoryList: [],

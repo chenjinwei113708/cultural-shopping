@@ -1,3 +1,12 @@
+/*
+ * @Author: chen
+ * @Date: 2021-12-24 15:13:42
+ * @LastEditTime: 2021-12-29 20:40:16
+ * @LastEditors: chen
+ * @Description: 
+ * @FilePath: \frontend-boblog\lib\utils.js
+ * 
+ */
 
 /**
  * 验证邮箱
@@ -26,4 +35,26 @@ export function validPassword(email) {
  */
 export function isArray(arr) {
   return Array.isArray(arr) && arr.length > 0
+}
+
+/**
+ * 动态加载百度地图 API 函数
+ * @param {*} ak 百度地图key 
+ * @returns 
+ */
+export function loadBMap(ak) {
+  return new Promise(function(resolve, reject) {
+    if (typeof window.BMap !== 'undefined') {
+      resolve(window.BMap)
+      return true
+    }
+    window.onBMapCallback = function() {
+      resolve(window.BMap)
+    }
+    const script = document.createElement('script')
+    script.type = 'text/javascript'
+    script.src = 'http://api.map.baidu.com/api?v=3.0&ak=' + ak + '&callback=onBMapCallback'
+    script.onerror = reject
+    document.head.appendChild(script)
+  })
 }
