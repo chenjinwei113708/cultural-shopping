@@ -3,7 +3,7 @@
     <div class="comment">
       <div class="comment-from">
         <div class="comment-avatar">
-          <img src="https://cdn.boblog.com/avatar.png" alt="avatar" />
+          <img src="http://124.71.112.249/images/2022/01/06/avatar.png" alt="avatar" />
         </div>
         <div class="comment-textarea">
           <textarea
@@ -39,7 +39,7 @@
           class="comment-item"
         >
           <div class="comment-item-avatar">
-            <img src="https://cdn.boblog.com/avatar.png" alt="avatar" />
+            <img src="http://124.71.112.249/images/2022/01/06/avatar.png" alt="avatar" />
           </div>
           <div class="comment-item-detail">
             <div class="comment-item-user">
@@ -253,8 +253,8 @@ export default {
 <style scoped lang="scss">
 .comment {
   box-sizing: border-box;
-  padding: 80px 0 120px;
-  width: 100%;
+  // 这是1280+(44+14)*2 要算上头像的
+  width: 1390px;
   margin: 0 auto;
 
   .comment-from {
@@ -317,7 +317,7 @@ export default {
     padding: 16px;
     font-size: 14px;
     color: #222;
-    width: 824px;
+    width: 1280px;
     height: 130px;
     background: #fff;
     border: 1px solid #ccc;
@@ -336,6 +336,8 @@ export default {
     margin-top: 16px;
     display: flex;
     justify-content: flex-end;
+    // 1396-(120/2)
+    width: 1336px;
 
     &-btn {
       cursor: pointer;
@@ -353,7 +355,15 @@ export default {
     }
   }
 }
+.comment-container {
+  width: 1280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0 auto;
+}
 .comment-count {
+  width: 1280px;
   padding-bottom: 24px;
   font-size: 24px;
   font-weight: 600;
@@ -362,6 +372,7 @@ export default {
 }
 
 .comment-item {
+  width: 1230px;
   box-sizing: border-box;
   padding: 32px 0;
   display: flex;

@@ -7,7 +7,7 @@
         :model="searchForm"
         inline
       >
-        <el-form-item label="用户ID" prop="id">
+        <el-form-item label="用户ID" prop="user_id">
           <el-input
             v-model.trim="searchForm.user_id"
             placeholder="用户ID"

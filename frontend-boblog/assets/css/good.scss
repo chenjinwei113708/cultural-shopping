@@ -1,0 +1,292 @@
+$headerBgColor:white;
+$navBgColor:white;
+$subHeaderBgColor:white;
+$bgColor:#f7fafc;
+$borderColor:#e6e8eb;
+$iconDefaultColor:#adadab;
+$iconDeepColor:#737373;
+$subBgColor:#f2f2f2;
+
+$falseColor:#be4141;
+
+$mainColor:#337da4;
+$secondColor:#0e90d2;
+$thirdColor:#b4a078;
+$forthColor:#199475;
+$fifthColor:#4e8858;
+$sixthColor:#00bdd1;
+$seventhColor:#144459;
+$eighthColor:#2f334d;
+
+$fontWhiteColor:white;
+$fontShallowColor:#d8d8d8;
+$fontDefaultColor:#7d7d7d;
+$fontDeepColor:#263238;
+
+$dayWeatherBg0:#3667e6;
+$dayWeatherBg1:#9ec5fb;
+$dayWeatherHeaderBorder:#3664e3;
+$nightWeatherBg0:#1a2260;
+$nightWeatherBg1:#306ea0;
+$nightWeatherHeaderBorder:#0b2e52;
+
+$popupBgColor:rgba(54,56,71,0.8);
+$banColor:#ee1b48;
+$confirmColor:#00b0f6;
+
+
+.content{
+  width: 100%;
+  // padding-top: 20px;
+  .goodsInfo{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    overflow: hidden;
+    .infoLeft{
+      padding: 25px;
+      width: 400px;
+      height: 400px;
+      float: left;
+    }
+    .infoRight{
+      width: 700px;
+      .infoBox{
+        margin-bottom: 15px;
+        .name{
+          font-size: 20px;
+        }
+        p{
+          color:$fontDefaultColor;
+          font-size: 15px;
+        }
+        .price{
+          font-size: 35px;
+          color:$falseColor;
+        }
+        span{
+          color:$fontDefaultColor;
+          font-size: 13px;
+          display: inline-block;
+          width: 50px;
+        }
+        .tips{
+          width: auto;
+          margin: 0 20px 0 5px;
+        }
+        .NumberInput{
+          display: inline-block;
+          vertical-align: middle;
+        }
+      }
+      button{
+        background-color: #b4a078;
+        width: 170px;
+        height: 50px;
+        color:white;
+        border: none;
+        font-size: 19px;
+        margin-right: 20px;
+        margin-top: 10px;
+        &:hover{
+          opacity:0.8;
+        }
+      }
+      .buyBtn{
+        border: 1px solid #b4a078;
+        color:#b4a078;
+        background-color: #f5f3ef;
+      }
+    }
+  }
+  .msgBox{
+    margin: 50px 0;
+    border: 1px solid $borderColor;
+    padding-top: 0;
+    .tagList{
+      width: 100%;
+      height: 40px;
+      border-bottom: 1px solid $borderColor;
+      background-color: #f5f5f5;
+      li{
+        width: 170px;
+        height: 42px;
+        position: relative;
+        top: -2px;
+        display: inline-block;
+        text-align: center;
+        line-height: 40px;
+        font-size: 13px;
+        cursor: pointer;
+        &:hover{
+          color:$thirdColor;
+        }
+      }
+      .selected{
+        background-color: white;
+        border-top: 4px solid $thirdColor;
+      }
+    }
+    .commentBody{
+      padding: 20px;
+      min-height: 300px;
+      .rateBox{
+        margin-bottom: 10px;
+        span{
+          color:$fontDefaultColor;
+          display: inline-block;
+          margin-right: 10px;
+        }
+        .rate{
+          color:$falseColor;
+          font-weight: 600;
+          font-size: 30px;
+        }
+      }
+      .commentList{
+        width: 100%;
+        li{
+          width: 100%;
+          display: block;
+          margin: 0 auto;
+          border-bottom:1px solid $borderColor;
+          padding: 20px 0;
+          .userInfo{
+            width: 80px;
+            display: inline-block;
+            text-align: center;
+            img{
+              margin: auto;
+              display: block;
+              width: 50px;
+              height: 50px;
+              border-radius: 50%;
+              margin-bottom: 6px;
+            }
+            span{
+              font-size: 13px;
+              color:$fontDefaultColor;
+            }
+          }
+          .commentInfo{
+            display: inline-block;
+            vertical-align: top;
+            .starList{
+              i{
+                color:#f9bd4f;
+              }
+            }
+            .specName,.time{
+              color:$fontDefaultColor;
+              font-size: 13px;
+              margin-top: 10px;
+            }
+            .comment{
+              margin-top: 10px;
+            }
+          }
+        }
+      }
+      .noComment{
+        width: 100%;
+        text-align: center;
+        color:$thirdColor;
+        padding-top: 30px;
+      }
+    }
+    .msgBody{
+      padding: 20px;
+      min-height: 300px;
+      .inputBox{
+        margin-top: 20px;
+        textarea{
+          width: 88%;
+          height: 50px;
+          padding: 5px;
+          border:2px solid $borderColor;
+          display: inline-block;
+          overflow: hidden;
+        }
+        button,.banAsk{
+          float: right;
+          width: 10%;
+          height: 50px;
+          position: relative;
+          display: inline-block;
+          overflow: hidden;
+          background-color: white;
+          border: 2px solid $fontShallowColor;
+          color:$fontDefaultColor;
+        }
+        .banAsk{
+          background-color: $fontShallowColor;
+          text-align: center;
+          font-size: 12px;
+          line-height: 50px;
+          color:white;
+          user-select:none;
+        }
+      }
+      .msgList{
+        margin-top: 20px;
+        li{
+          border-bottom: 1px solid $borderColor;
+          padding: 10px 0;
+          .ask,.answer{
+            margin: 8px 0;
+            width: 100%;
+            .note{
+              display: inline-block;
+              color:white;
+              text-align: center;
+              width: 20px;
+              height: 20px;
+              border-radius: 50%;
+              font-size: 10px;
+              line-height: 20px;
+            }
+            .text{
+              font-size: 14px;
+            }
+            .tipsInfo{
+              float: right;
+              font-size: 14px;
+              color:$fontDefaultColor;
+            }
+          }
+          .ask{
+            .note{
+              background-color: $falseColor;
+            }
+          }
+          .answer{
+            .note{
+              background-color: $mainColor;
+            }
+          }
+        }
+      }
+    }
+  }
+  .typeGoods{
+    margin: 50px 0;
+    border: 1px solid $borderColor;
+    padding-top: 0;
+    .title{
+      text-align: center;
+      width: 100%;
+      height: 40px;
+      line-height: 40px;
+      background-color: #f5f5f5;
+      font-weight: 600;
+      border-bottom: 1px solid $borderColor;
+    }
+    .list{
+      .GoodsItem{
+        display:block;
+        border-bottom:1px dotted $borderColor;
+        margin: 0 auto;
+      }
+    }
+  }
+}

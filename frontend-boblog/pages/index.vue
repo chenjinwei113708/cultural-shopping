@@ -38,9 +38,8 @@
   </div>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 import { getArticleList } from '@/request/api/article'
-
 export default {
   async asyncData(context) {
     // eslint-disable-next-line camelcase
@@ -53,6 +52,7 @@ export default {
       is_category: 1,
       is_admin: 1,
     })
+
     if (!err) {
       const isLoad = res.data.data.meta.total_pages > page
       return {
@@ -97,7 +97,6 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['getArticleListData']),
     // 获取新数据
     async fetchData(id) {
       const [err, res] = await getArticleList({
@@ -126,19 +125,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@font-face {
-  font-family: 'iconfont';  /* Project id 3062722 */
-  src: url('//at.alicdn.com/t/font_3062722_5pyyp0e4yuf.woff2?t=1640788190437') format('woff2'),
-       url('//at.alicdn.com/t/font_3062722_5pyyp0e4yuf.woff?t=1640788190437') format('woff'),
-       url('//at.alicdn.com/t/font_3062722_5pyyp0e4yuf.ttf?t=1640788190437') format('truetype');
-}
-.iconfont {
-  font-family: "iconfont" !important;
-  font-size: 30px;
-  font-style: normal;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+
 .clear-refresh {
   margin-top: 16px;
   text-align: center;

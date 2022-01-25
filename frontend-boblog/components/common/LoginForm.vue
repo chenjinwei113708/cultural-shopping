@@ -2,11 +2,11 @@
   <div class="form-wrap">
     <div class="form">
       <div class="form-bg">
-        <img src="https://cdn.boblog.com/login-bg.png" alt="login" />
+        <img src="http://124.71.112.249/images/2022/01/06/login.png" alt="login" />
       </div>
       <div class="form-list">
         <div class="logo">
-          <img src="https://cdn.boblog.com/logo.png" alt="logo" />
+          <img src="http://124.71.112.249/images/2022/01/06/logo.png" alt="logo" />
         </div>
         <div v-if="!isLogin" class="form-item">
           <input

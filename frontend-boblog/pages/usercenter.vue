@@ -4,7 +4,7 @@
       <p>昵称：{{ userInfo.username }}</p>
       <p>邮箱：{{ userInfo.email }}</p>
       <p style="text-indent: 2em">
-        —— 假如生活欺骗了你，请你不要放弃，坚持下去！天是不会给绝路你的！
+        —— 生活就像海洋，只有意志坚强的人，才能到达彼岸。 
       </p>
       <el-button @click="logout"> 退出登录 </el-button>
 

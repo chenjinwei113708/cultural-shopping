@@ -102,7 +102,7 @@ router.put('/article/:id', async (ctx) => {
  * 获取文章列表
  */
 router.get('/article', async (ctx) => {
-  // 尝试获文章取缓存
+  // 尝试获取文章缓存
   const { category_id = 0, page = 1 } = ctx.query;
 
   // 没有缓存，则读取数据库

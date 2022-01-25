@@ -1,10 +1,10 @@
 /*
  * @Author: chen
  * @Date: 2021-11-28 22:29:58
- * @LastEditTime: 2021-12-22 14:44:08
+ * @LastEditTime: 2022-01-18 17:53:19
  * @LastEditors: chen
  * @Description: 分类的路由 API 接口
- * @FilePath: \nodejs-koa-blog\app\api\v1\category.js
+ * @FilePath: \cultural-shopping\app\api\v1\category.js
  * 
  */
 
@@ -30,7 +30,7 @@ const router = new Router({
 /**
  * 创建分类
  */
-router.post('/category', new Auth(AUTH_ADMIN).m, async (ctx) => {
+router.post('/category', async (ctx) => {
   // 通过验证器校验参数是否通过
   const v = await new CategoryValidator().validate(ctx);
   const [err, data] = await CategoryDao.create({

@@ -1,14 +1,14 @@
 /*
  * @Author: chen
  * @Date: 2021-11-28 22:29:58
- * @LastEditTime: 2021-12-22 16:11:34
+ * @LastEditTime: 2022-01-18 15:51:50
  * @LastEditors: chen
  * @Description: 管理员的数据访问对象
- * @FilePath: \nodejs-koa-blog\app\dao\admin.js
+ * @FilePath: \cultural-shopping\app\dao\admin.js
  * 
  */
 
-const { Admin } = require('@models/admin')
+const { Admin } = require('../models/admin')
 const bcrypt = require('bcryptjs')
 
 class AdminDao {
@@ -26,13 +26,12 @@ class AdminDao {
       throw new global.errs.Existing('管理员已存在');
     }
 
-    const admin = new Admin();
-    admin.nickname = nickname
-    admin.email = email
-    admin.password = password
-
     try {
-      const res = await admin.save();
+      const res = await Admin.create({
+        nickname: nickname,
+        email: email,
+        password: password
+      });
 
       const data = {
         email: res.email,

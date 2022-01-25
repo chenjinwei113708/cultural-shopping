@@ -4,10 +4,18 @@ module.exports = {
     parser: 'babel-eslint',
     sourceType: 'module'
   },
-  env: {
-    browser: true,
-    node: true,
-    es6: true,
+  globals: {
+    BMap: true,
+    BMAP_ANCHOR_TOP_RIGHT: true,
+    BMAP_ANCHOR_BOTTOM_LEFT: true,
+    BMAP_NAVIGATION_CONTROL_SMALL: true,
+    BMAP_STATUS_SUCCESS: true
+  },
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es6": true,
+    "jquery": true
   },
   extends: ['plugin:vue/recommended', 'eslint:recommended'],
 

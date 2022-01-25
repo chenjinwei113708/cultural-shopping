@@ -7,9 +7,9 @@
         :model="searchForm"
         inline
       >
-        <el-form-item label="回复ID" prop="id">
+        <el-form-item label="回复ID" prop="user_id">
           <el-input
-            v-model.trim="searchForm.id"
+            v-model.trim="searchForm.user_id"
             placeholder="回复ID"
             class="input"
             clearable
@@ -70,7 +70,7 @@
       >
         <el-table-column label="ID" width="80" align="center">
           <template slot-scope="scope">
-            {{ scope.row.id }}
+            {{ scope.row.user_id }}
           </template>
         </el-table-column>
         <el-table-column label="回复内容">
@@ -196,7 +196,7 @@ export default {
       listLoading: true,
       count: 0,
       searchForm: {
-        id: '',
+        user_id: '',
         article_id: '',
         content: '',
         status: '',

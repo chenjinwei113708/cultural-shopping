@@ -150,3 +150,18 @@
   padding: 15px 0;
 }
 
+/* 阿里矢量图 */
+@font-face {
+  font-family: 'iconfont';  /* Project id 3062722 */
+  src: url('//at.alicdn.com/t/font_3062722_quuym9k9fzc.woff2?t=1641543154363') format('woff2'),
+       url('//at.alicdn.com/t/font_3062722_quuym9k9fzc.woff?t=1641543154363') format('woff'),
+       url('//at.alicdn.com/t/font_3062722_quuym9k9fzc.ttf?t=1641543154363') format('truetype');
+}
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 30px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+

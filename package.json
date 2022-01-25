@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon app.js",
-    "test": "jest _tests  --forceExit --runInBand --colors"
+    "test": "jest _test  --forceExit --runInBand --colors --verbose false",
+    "clear": "jest --clearCache"
   },
   "repository": {
     "type": "git",
@@ -19,11 +20,11 @@
     "ejs",
     "vuejs",
     "JavaScript",
-    "博客网站",
+    "民俗推荐网站",
     "Node.js实战",
     "ejs 服务端渲染"
   ],
-  "author": "Fengbo Liang, https://github.com/lfb",
+  "author": "chen",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/lfb/nodejs-koa2-blog/issues"
@@ -67,6 +68,10 @@
     "xss": "^1.0.6"
   },
   "directories": {
-    "test": "_tests"
-  }
+    "test": "_test"
+  },
+  "moduleDirectories": [
+    "node_modules",
+    "src"
+  ] 
 }

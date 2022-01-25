@@ -1,10 +1,10 @@
 /*
  * @Author: chen
  * @Date: 2021-11-28 22:29:58
- * @LastEditTime: 2021-12-23 22:19:57
+ * @LastEditTime: 2022-01-25 10:48:11
  * @LastEditors: chen
  * @Description: 数据库管理
- * @FilePath: \nodejs-koa-blog\core\db.js
+ * @FilePath: \cultural-shopping\core\db.js
  * 
  */
 const Sequelize = require('sequelize');
@@ -53,7 +53,7 @@ const sequelize = new Sequelize(dbName, user, password, {
 });
 
 // 创建模型-如果表存在，先删除再创建
-sequelize.sync({ force: false });
+// sequelize.sync({ force: false });
 
 // 使用 .authenticate() 函数测试连接是否正常
 sequelize.authenticate().then( res => {

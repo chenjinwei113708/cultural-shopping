@@ -1,3 +1,12 @@
+/*
+ * @Author: chen
+ * @Date: 2022-01-18 11:53:02
+ * @LastEditTime: 2022-01-18 15:07:47
+ * @LastEditors: chen
+ * @Description: 
+ * @FilePath: \cultural-shopping\_test\api\admin.test.js
+ * 
+ */
 const server = require('../server')
 const {nickname, email, password} = require('../utils')
 const {saveTokens, getToken} = require('../token')

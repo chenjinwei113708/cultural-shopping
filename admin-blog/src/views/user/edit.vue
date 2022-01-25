@@ -13,6 +13,15 @@
       <el-form-item label="用户邮箱" prop="email">
         <el-input v-model="ruleForm.email" />
       </el-form-item>
+      <el-form-item label="收件姓名" prop="recipient_name">
+        <el-input v-model="ruleForm.recipient_name" />
+      </el-form-item>
+      <el-form-item label="电话号码" prop="phone">
+        <el-input v-model="ruleForm.phone" />
+      </el-form-item>
+      <el-form-item label="收件地址" prop="address">
+        <el-input v-model="ruleForm.address" />
+      </el-form-item>
       <el-form-item label="展示">
         <el-radio-group v-model="ruleForm.status">
           <el-radio :label="0">禁用</el-radio>
@@ -42,13 +51,18 @@ export default {
   data() {
     return {
       ruleForm: {
-        user_id: this.$route.query.user_id,
+        user_id: '',
         username: '',
         email: 1,
-        status: 1
+        status: 1,
+        phone: '',
+        recipient_name: '',
+        address: ''
       },
       rules: {
-        username: [{ required: true, message: '请输入用户名称', trigger: 'blur' }],
+        username: [
+          { required: true, message: '请输入用户名称', trigger: 'blur' }
+        ],
         email: [
           { required: true, message: '请输入用户邮箱', trigger: 'blur' }
         ]
@@ -76,9 +90,13 @@ export default {
         const res = await userInfo({
           user_id: this.$route.query.user_id
         })
+        this.ruleForm.user_id = res.data.user_id
         this.ruleForm.username = res.data.username
         this.ruleForm.status = res.data.status
         this.ruleForm.email = res.data.email
+        this.ruleForm.phone = res.data.phone
+        this.ruleForm.address = res.data.address
+        this.ruleForm.recipient_name = res.data.recipient_name
       } catch (err) {
         console.log(err)
       }

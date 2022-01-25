@@ -1,3 +1,12 @@
+/*
+ * @Author: chen
+ * @Date: 2021-12-24 15:13:42
+ * @LastEditTime: 2022-01-23 17:46:18
+ * @LastEditors: chen
+ * @Description: 
+ * @FilePath: \cultural-shopping\frontend-boblog\plugins\element-ui.js
+ * 
+ */
 import Vue from 'vue'
 import {
   Icon,
@@ -12,6 +21,8 @@ import {
   Loading,
   MessageBox,
   Message,
+  Radio,
+  RadioGroup
 } from 'element-ui'
 
 import locale from 'element-ui/lib/locale/lang/en'
@@ -25,7 +36,9 @@ const components = [
   DropdownMenu,
   DropdownItem,
   Pagination,
-  Drawer
+  Drawer,
+  Radio,
+  RadioGroup
 ]
 const Element = {
   install(Vue) {

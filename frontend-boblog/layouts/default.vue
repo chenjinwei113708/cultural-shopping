@@ -1,14 +1,14 @@
 <!--
  * @Author: chen
  * @Date: 2021-12-24 15:13:42
- * @LastEditTime: 2022-01-02 17:00:08
+ * @LastEditTime: 2022-01-06 15:01:28
  * @LastEditors: chen
  * @Description: 
  * @FilePath: \frontend-boblog\layouts\default.vue
  * 
 -->
 <template>
-  <div>
+  <div class="view">
     <client-only>
       <Header />
       <Nuxt />
@@ -27,4 +27,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.view {
+  background: #f4f5f5;
+}
 </style>

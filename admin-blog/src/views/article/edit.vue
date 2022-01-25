@@ -22,10 +22,9 @@
       <el-form-item label="图片" prop="img_url">
         <el-upload
           class="avatar-uploader"
-          action="https://upload-z2.qiniup.com/"
+          action=""
           :show-file-list="false"
-          :data="{ token }"
-          :on-success="handleUploadSuccess"
+          :http-request="upload"
         >
           <img
             v-if="ruleForm.img_url"
@@ -56,6 +55,33 @@
       <el-form-item label="排序" prop="sort_order">
         <el-input v-model="ruleForm.sort_order" />
       </el-form-item>
+      <el-form-item label="详细地址：" prop="address">
+        <el-autocomplete
+          v-model="ruleForm.address"
+          style="width:100%;"
+          popper-class="autoAddressClass"
+          :fetch-suggestions="querySearchAsync"
+          :trigger-on-focus="false"
+          placeholder="详细地址"
+          clearable
+          @select="handleSelect"
+        >
+          <template slot-scope="{ item }">
+            <i class="el-icon-search fl mgr10" />
+            <div style="overflow:hidden;">
+              <div class="title">{{ item.title }}</div>
+              <span class="address ellipsis">{{ item.address }}</span>
+            </div>
+          </template>
+        </el-autocomplete>
+      </el-form-item>
+      <el-form-item label="地图定位：">
+        <div id="map-container" style="width:100%;height:500px; " />
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="onSubmit">提交</el-button>
+        <el-button>取消</el-button>
+      </el-form-item>
       <el-form-item label="内容" prop="content">
         <mavon-editor
           ref="md"
@@ -83,6 +109,7 @@ import { detail, update } from '@/api/article'
 import { list } from '@/api/category'
 import { getToken } from '@/api/upload'
 import axios from 'axios'
+import loadBMap from '@/utils/loadBMap.js'
 
 export default {
   name: 'CategoryCreate',
@@ -100,7 +127,13 @@ export default {
         sort_order: 1,
         admin_id: '',
         category_id: '',
-        content: ''
+        content: '',
+        address: '', // 详细地址
+        addrPoint: { // 详细经纬度
+          lng: 0,
+          lat: 0
+        },
+        address_point: '' // 用来拼接addrPoint并存入数据库
       },
       rules: {
         title: [{ required: true, message: '请输入文章标题', trigger: 'blur' }],
@@ -122,7 +155,12 @@ export default {
         category_id: [
           { required: true, message: '请选择分类', trigger: 'blur' }
         ],
-        content: [{ required: true, message: '请输入内容', trigger: 'blur' }]
+        content: [
+          { required: true, message: '请输入内容', trigger: 'blur' }
+        ],
+        address: [
+          { required: true, message: '请输入详细地址', trigger: 'blur' }
+        ]
       }
     }
   },
@@ -140,6 +178,7 @@ export default {
       this.getArticleDetail()
       this.getUploadToken()
       this.getCategoryList()
+      this.setBMap()
     },
     // 获取用户信息
     async getUploadToken() {
@@ -166,6 +205,9 @@ export default {
         this.ruleForm.sort_order = res.data.sort_order
         this.ruleForm.category_id = res.data.category_info.id
         this.ruleForm.content = res.data.content
+        this.ruleForm.address = res.data.address
+        this.ruleForm.addrPoint.lng = Number(res.data.address_point.split(':')[0])
+        this.ruleForm.addrPoint.lat = Number(res.data.address_point.split(':')[1])
         this.ruleForm.admin_id =
           (this.adminInfo && this.adminInfo.id) || res.data.adminInfo.id
       } catch (err) {
@@ -173,14 +215,28 @@ export default {
       }
     },
     // 图片上传成功回调
-    handleUploadSuccess(file) {
-      this.ruleForm.img_url = `https://cdn.boblog.com/${file.key}`
-      this.$message.success('上传成功!')
+    upload(params) {
+      const data = new FormData()
+      data.append('source', params.file)
+      this.$axios({
+        url: 'http://124.71.112.249/api/1/upload/?key=a3d2f4bb1d05dfdcca756f61535d7dc5',
+        method: 'post',
+        data,
+        headers: { 'Content-Type': 'multipart/form-data' }
+      }).then(res => {
+        this.$message.success('图片上传成功')
+        this.ruleForm.img_url = res.data.image.url
+      }).catch(err => {
+        console.log('图片上传失败', err)
+      })
+    },
+    handleUploadError(err) {
+      console.log('error', err)
     },
     $imgDel(pos, $file) {
       console.log(pos, $file)
     },
-    // 绑定@imgAdd event
+    // 编辑器新增上传图片回调
     $imgAdd(pos, $file) {
       const loading = this.$loading({
         lock: true,
@@ -191,15 +247,14 @@ export default {
 
       // 第一步.将图片上传到服务器.
       const formdata = new FormData()
-      formdata.append('file', $file)
-      formdata.append('token', this.token)
+      formdata.append('source', $file)
       this.$axios({
-        url: 'https://upload-z2.qiniup.com/',
+        url: 'http://124.71.112.249/api/1/upload/?key=a3d2f4bb1d05dfdcca756f61535d7dc5',
         method: 'post',
         data: formdata,
         headers: { 'Content-Type': 'multipart/form-data' }
       }).then((res) => {
-        const img_url = `https://cdn.boblog.com/${res.data.key}`
+        const img_url = res.data.image.url
         this.$refs.md.$img2Url(pos, img_url)
         loading.close()
       }).catch(err => {
@@ -224,6 +279,7 @@ export default {
       // 发布者id
       if (this.adminInfo) {
         this.ruleForm.admin_id = this.adminInfo.id
+        this.ruleForm.address_point = this.ruleForm.addrPoint.lng + ':' + this.ruleForm.addrPoint.lat
       }
       this.$refs[formName].validate(async(valid) => {
         if (valid) {
@@ -256,6 +312,81 @@ export default {
       } catch (err) {
         this.$message.error(err)
       }
+    },
+    // 加载BMap
+    async setBMap() {
+      await loadBMap('Q0Hozuj64PoL9QKqBLc7qjYLdlL4IC6l') // 加载引入BMap
+      this.initMap()
+    },
+    // 初始化地图
+    initMap() {
+      var that = this
+      // 挂载地图 enableMapClick:禁用地图默认点击弹框
+      this.map = new BMap.Map('map-container')
+      var point = new BMap.Point(this.ruleForm.addrPoint.lng, this.ruleForm.addrPoint.lat)
+      that.locationPoint = new BMap.Point(this.ruleForm.addrPoint.lng, this.ruleForm.addrPoint.lat)
+      // 初始化地图（设置进度），如果center类型为 Point 时，zoom必须赋值，范围为3-19级
+      this.map.centerAndZoom(point, 19)
+      // 设置图像标注并绑定拖拽标注结束后事件
+      this.mk = new BMap.Marker(point, { enableDragging: true })
+      // 将覆盖物添加到地图上
+      this.map.addOverlay(this.mk)
+      this.mk.addEventListener('dragend', function(e) {
+        that.getAddrByPoint(e.point)
+      })
+      // 添加（右上角）平移缩放控件
+      this.map.addControl(new BMap.NavigationControl({ anchor: BMAP_ANCHOR_TOP_RIGHT, type: BMAP_NAVIGATION_CONTROL_SMALL }))
+
+      // 绑定点击地图任意点事件
+      this.map.addEventListener('click', function(e) {
+        that.getAddrByPoint(e.point)
+      })
+    },
+    // 获取两点间的距离
+    getDistancs(pointA, pointB) {
+      return this.map.getDistance(pointA, pointB).toFixed(2)
+    },
+
+    // 逆地址解析函数
+    getAddrByPoint(point) {
+      var that = this
+      var geco = new BMap.Geocoder({ extensions_town: true })
+      //  将地理坐标(经纬度)转换成地址
+      geco.getLocation(point, function(res) {
+        that.mk.setPosition(point)
+        that.map.panTo(point)
+        that.ruleForm.address = res.address
+        that.ruleForm.addrPoint = point
+      }, { poiRadius: 5, numPois: 1 })
+    },
+    // 地址搜索
+    querySearchAsync(str, cb) {
+      var options = {
+        onSearchComplete: function(res) {
+          var s = []
+          if (local.getStatus() === BMAP_STATUS_SUCCESS) {
+            for (var i = 0; i < res.getCurrentNumPois(); i++) {
+              s.push(res.getPoi(i))
+            }
+            cb(s)
+          } else {
+            cb(s)
+          }
+        }
+      }
+      var local = new BMap.LocalSearch(this.map, options)
+      local.search(str)
+    },
+    handleSelect(item) {
+      this.ruleForm.address = item.address + item.title
+      this.ruleForm.addrPoint = item.point
+      this.map.clearOverlays()
+      this.mk = new BMap.Marker(item.point)
+      this.map.addOverlay(this.mk)
+      this.map.panTo(item.point)
+    },
+    onSubmit() {
+      console.log(this.ruleForm)
     }
   }
 }

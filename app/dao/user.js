@@ -1,8 +1,3 @@
-/**
- * @description 用户的数据访问对象
- * @description Data Access Objects for Useristrators
- * @author 梁凤波, Peter Liang
- */
 const { Op } = require('sequelize')
 const { User } = require('@models/user')
 const bcrypt = require('bcryptjs')
@@ -125,10 +120,13 @@ class UserDao {
     } else if(v.get('body.star')) {
       user.star = v.get('body.star');
     } else {
-    // 更新用户
-    user.email = v.get('body.email')
-    user.username = v.get('body.username')
-    user.status = v.get('body.status')
+      // 更新用户
+      user.email = v.get('body.email')
+      user.username = v.get('body.username')
+      user.status = v.get('body.status')
+      user.phone = v.get('body.phone')
+      user.recipient_name = v.get('body.recipient_name')
+      user.address = v.get('body.address')
     }
     // console.log('user',user)
     try {

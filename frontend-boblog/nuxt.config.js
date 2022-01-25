@@ -1,7 +1,7 @@
 /*
  * @Author: chen
  * @Date: 2021-11-28 22:29:58
- * @LastEditTime: 2021-12-25 20:37:16
+ * @LastEditTime: 2022-01-22 21:30:47
  * @LastEditors: chen
  * @Description: 
  * @FilePath: \cultural-shopping\frontend-boblog\nuxt.config.js
@@ -42,7 +42,8 @@ export default {
     '@/plugins/md',
     '@/plugins/route',
     { src: '@/plugins/scrollTo', mode: 'client' },
-    '@/plugins/element-ui'
+    '@/plugins/element-ui',
+    { src: "@/plugins/vue-awesome-swiper.js", ssr: false }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

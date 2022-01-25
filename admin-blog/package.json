@@ -16,6 +16,7 @@
   "dependencies": {
     "axios": "0.18.1",
     "core-js": "3.6.5",
+    "element-china-area-data": "5.0.2",
     "element-ui": "2.13.2",
     "highlight.js": "^11.1.0",
     "js-base64": "^3.6.1",
@@ -26,6 +27,7 @@
     "nprogress": "0.2.0",
     "path-to-regexp": "2.4.0",
     "vue": "2.6.10",
+    "vue-baidu-map": "^0.21.22",
     "vue-router": "3.0.6",
     "vuex": "3.1.0"
   },

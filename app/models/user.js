@@ -1,7 +1,7 @@
 /*
  * @Author: chen
  * @Date: 2021-11-28 22:29:58
- * @LastEditTime: 2022-01-04 10:08:02
+ * @LastEditTime: 2022-01-25 10:49:55
  * @LastEditors: chen
  * @Description: 用户表模型
  * @FilePath: \cultural-shopping\app\models\user.js
@@ -25,13 +25,27 @@ User.init({
         autoIncrement: true
     },
     username: {
-        type: DataTypes.STRING(50),
+        type: DataTypes.STRING(64),
         allowNull: false,
-        // 备注
         comment: '用户昵称'
     },
+    recipient_name: {
+        type: DataTypes.STRING(64),
+        allowNull: true,
+        comment: '收件人姓名'
+    },
+    address: {
+        type: DataTypes.STRING(128),
+        allowNull: true,
+        comment: '收件人地址'
+    },
+    phone: {
+        type: DataTypes.STRING(64),
+        allowNull: true,
+        comment: '收件人电话'
+    },
     email: {
-        type: DataTypes.STRING(50),
+        type: DataTypes.STRING(64),
         allowNull: false,
         unique: 'user_email_unique',
         comment: '登录邮箱'
@@ -78,6 +92,7 @@ User.init({
     modelName: 'user',
     tableName: 'user'
 })
+User.sync({alter: true})
 
 module.exports = {
     User

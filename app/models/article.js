@@ -1,7 +1,7 @@
 /*
  * @Author: chen
  * @Date: 2021-12-24 15:13:42
- * @LastEditTime: 2022-01-03 21:52:33
+ * @LastEditTime: 2022-01-16 21:45:59
  * @LastEditors: chen
  * @Description: 
  * @FilePath: \cultural-shopping\app\models\article.js
@@ -110,7 +110,6 @@ Article.init({
   modelName: 'article',
   tableName: 'article'
 })
-
 module.exports = {
   Article
 }

@@ -124,8 +124,7 @@ class ArticleDao {
 
   // 获取文章列表
   static async list(params = {}) {
-    const { category_id, keyword, page_size = 10, status, page = 1 } = params;
-    // console.log('page', category_id)
+    const { id, title, category_id, keyword, page_size = 10, status, page = 1 } = params;
 
     // 筛选方式
     let filter = {
@@ -136,7 +135,10 @@ class ArticleDao {
     if (category_id) {
       filter.category_id = category_id;
     }
-
+    // 筛选方式：存在分类ID
+    if (id) {
+      filter.id = id;
+    }// 筛选方式：存在分类ID
     // 筛选方式：存在搜索关键字
     if (keyword) {
       filter.title = {
@@ -158,13 +160,13 @@ class ArticleDao {
       });
 
       let rows = article.rows
-      // 处理分类
+      // 处理分类 为它添加分类信息
       const categoryIds = unique(rows.map(item => item.category_id))
       const [categoryError, dataAndCategory] = await ArticleDao._handleCategory(rows, categoryIds)
       if (!categoryError) {
         rows = dataAndCategory
       }
-      // 处理创建人
+      // 处理创建人 为它添加创建者信息
       const adminIds = unique(rows.map(item => item.admin_id))
       const [userError, dataAndAdmin] = await ArticleDao._handleAdmin(rows, adminIds)
       if (!userError) {

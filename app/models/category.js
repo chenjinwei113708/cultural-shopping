@@ -1,3 +1,12 @@
+/*
+ * @Author: chen
+ * @Date: 2021-12-24 15:13:42
+ * @LastEditTime: 2022-01-16 21:46:10
+ * @LastEditors: chen
+ * @Description: 
+ * @FilePath: \cultural-shopping\app\models\category.js
+ * 
+ */
 const moment = require('moment');
 
 const { sequelize } = require('@core/db')
@@ -51,7 +60,6 @@ Category.init({
   modelName: 'category',
   tableName: 'category'
 })
-
 module.exports = {
   Category
 }

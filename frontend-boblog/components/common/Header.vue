@@ -14,28 +14,6 @@
           {{ item.title }}
         </div>
       </div>
-      <div class="search" @click="showSearch = true">
-        <img src="https://cdn.boblog.com/search.png" alt="search" />
-      </div>
-    </div>
-    <div v-if="showSearch" class="search-fixed">
-      <div class="search-fixed-inner">
-        <form class="search-fixed-form" action="/">
-          <input
-            name="keyword"
-            type="text"
-            class="search-fixed-search"
-            placeholder="搜索"
-          />
-        </form>
-        <div class="search-fixed-search-icon" @click="closeSearch">
-          <img
-            width="20px"
-            src="https://cdn.boblog.com/Fr4xC9m-uaWaALnwLp7mtEs9nGpM"
-            alt="search"
-          />
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -53,7 +31,6 @@ export default {
   },
   data() {
     return {
-      showSearch: false,
       nav: [
         {
           title: '首页',
@@ -87,10 +64,6 @@ export default {
     this.handleNav()
   },
   methods: {
-    closeSearch() {
-      this.keyword = ''
-      this.showSearch = false
-    },
     // 动态增加/减少个人中心
     handleNav() {
       if (this.isLoginStatus) {
@@ -152,56 +125,5 @@ export default {
     color: #2d8cf0;
     text-decoration: underline;
   }
-}
-
-.search {
-  width: 28px;
-  cursor: pointer;
-}
-.search img {
-  width: 100%;
-}
-
-.search-fixed {
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 1000;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.95);
-}
-.search-fixed-inner {
-  position: fixed;
-  width: 1280px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.search-fixed-form {
-  flex: 1;
-}
-.search-fixed-search {
-  width: 100%;
-  border: none;
-  outline: none;
-  border-bottom: 1px solid #ccc;
-  height: 36px;
-  line-height: 36px;
-  font-size: 26px;
-  font-weight: 600;
-  color: #404040;
-  text-align: center;
-
-  &::placeholder {
-    color: #999999;
-  }
-}
-.search-fixed-search-icon {
-  cursor: pointer;
-  width: 20px;
 }
 </style>

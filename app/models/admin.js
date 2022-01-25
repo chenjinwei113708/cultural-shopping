@@ -1,17 +1,16 @@
 /*
  * @Author: chen
  * @Date: 2021-11-28 22:29:58
- * @LastEditTime: 2021-12-22 15:37:29
+ * @LastEditTime: 2022-01-18 13:39:16
  * @LastEditors: chen
  * @Description: 
- * @FilePath: \nodejs-koa-blog\app\models\admin.js
+ * @FilePath: \cultural-shopping\app\models\admin.js
  * 
  */
 const moment = require('moment');
 const bcrypt = require('bcryptjs')
-const { sequelize } = require('@core/db')
+const { sequelize } = require('../../core/db')
 const { Model, DataTypes } = require('sequelize')
-
 // 定义管理员模型
 class Admin extends Model {
 }

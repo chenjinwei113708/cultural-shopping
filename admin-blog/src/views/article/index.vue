@@ -38,9 +38,9 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="文章标题" prop="title">
+        <el-form-item label="文章标题" prop="keyword">
           <el-input
-            v-model.trim="searchForm.title"
+            v-model.trim="searchForm.keyword"
             placeholder="文章名称"
             class="input"
             clearable
@@ -189,6 +189,7 @@ export default {
       searchForm: {
         id: '',
         title: '',
+        keyword: '',
         status: '',
         page: 1,
         category_id: ''
