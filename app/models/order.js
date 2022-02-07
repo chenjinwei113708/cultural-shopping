@@ -1,7 +1,7 @@
 /*
  * @Author: chen
  * @Date: 2021-11-28 22:29:58
- * @LastEditTime: 2022-01-24 17:40:28
+ * @LastEditTime: 2022-01-29 21:12:25
  * @LastEditors: chen
  * @Description: 商品表模型
  * @FilePath: \cultural-shopping\app\models\order.js
@@ -27,6 +27,11 @@ Order.init({
     allowNull: false,
     comment: '用户id'
   },
+  img_url: {
+    type: DataTypes.STRING(128),
+    allowNull: false,
+    comment: '商品图片'
+  },
   gooddetail_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -41,6 +46,12 @@ Order.init({
     type: DataTypes.FLOAT,
     allowNull: false,
     comment: '付款金额'
+  },
+  hascomment: {
+    type:DataTypes.TINYINT,
+    allowNull: true,
+    defaultValue: 0,
+    comment: '订单评论状态：0-未评论,1-已评论'
   },
   // 0：未付款，1：已付款未发货，2：已发货未确认收货，3：确认收货订单完成
   status: {
@@ -61,7 +72,7 @@ Order.init({
   modelName: 'order'
 })
 
-
+// Order.sync({ alter: true })
 module.exports = {
   Order
 }

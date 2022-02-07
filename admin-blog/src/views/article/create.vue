@@ -169,6 +169,7 @@ export default {
     })
   },
   mounted() {
+    this.$scrollTo(10)
     this.$axios = axios.create({ withCredentials: false })
     this.getUploadToken()
     this.getCategoryList()

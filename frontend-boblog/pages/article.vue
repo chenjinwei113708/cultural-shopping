@@ -135,18 +135,18 @@
         <div v-if="goodList.length>=3" slot="button-next" class="swiper-button-next"></div>
       </swiper>
     </div>
-    <div ref="comment">
-      <vue-lazy-component >
-        <ArticleComment class="comment_container"/>
-      <img
-        width="0"
-        height="0"
-        style="display: none"
-        src="http://124.71.112.249/images/2022/01/06/avatar.png"
-        alt="preload"
-      />
-    </vue-lazy-component>
-    </div>
+      <div ref="comment">
+        <vue-lazy-component >
+          <ArticleComment class="comment_container"/>
+        <img
+          width="0"
+          height="0"
+          style="display: none"
+          src="http://124.71.112.249/images/2022/01/06/avatar.png"
+          alt="preload"
+        />
+        </vue-lazy-component>
+      </div>
     </div>
   </client-only>
 </template>
@@ -247,7 +247,6 @@ export default {
     this.getNewArticle()
     // eslint-disable-next-line no-console
     console.log('article',this.article)
-    console.log('goodlist',this.goodList)
   },
   methods: {
     // 回到顶部

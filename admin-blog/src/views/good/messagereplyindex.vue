@@ -1,3 +1,12 @@
+<!--
+ * @Author: chen
+ * @Date: 2022-02-03 21:51:44
+ * @LastEditTime: 2022-02-03 23:12:07
+ * @LastEditors: chen
+ * @Description: 
+ * @FilePath: \cultural-shopping\admin-blog\src\views\good\messagereplyindex.vue
+ * 
+-->
 <template>
   <div class="category">
     <div class="search">
@@ -7,18 +16,18 @@
         :model="searchForm"
         inline
       >
-        <el-form-item label="评论ID" prop="id">
+        <el-form-item label="回复ID" prop="user_id">
           <el-input
-            v-model.trim="searchForm.id"
-            placeholder="评论ID"
+            v-model.trim="searchForm.user_id"
+            placeholder="回复ID"
             class="input"
             clearable
           />
         </el-form-item>
-        <el-form-item label="文章ID" prop="article_id">
+        <el-form-item label="商品ID" prop="good_id">
           <el-input
-            v-model.trim="searchForm.article_id"
-            placeholder="文章ID"
+            v-model.trim="searchForm.good_id"
+            placeholder="商品ID"
             class="input"
             clearable
           />
@@ -36,10 +45,10 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="分类名称" prop="content">
+        <el-form-item label="回复内容" prop="content">
           <el-input
             v-model.trim="searchForm.content"
-            placeholder="评论内容"
+            placeholder="回复内容"
             class="input"
             clearable
           />
@@ -51,9 +60,6 @@
           </el-button>
           <el-button type="primary" size="medium" @click="resetSearchData">
             重置
-          </el-button>
-          <el-button type="primary" size="medium" @click="create">
-            新增分类
           </el-button>
         </el-form-item>
       </el-form>
@@ -73,30 +79,30 @@
             {{ scope.row.id }}
           </template>
         </el-table-column>
-        <el-table-column label="评论内容">
+        <el-table-column label="回复内容">
           <template slot-scope="scope">
             <div v-html="mdRender(scope.row.content)" />
           </template>
         </el-table-column>
-        <el-table-column label="评论人信息" align="center">
+        <el-table-column label="回复人信息" align="center">
           <template slot-scope="scope">
             {{ scope.row.user_info || "匿名" }}
           </template>
         </el-table-column>
-        <el-table-column label="评论文章" align="center">
+        <el-table-column label="回复商品" align="center">
           <template slot-scope="scope">
-            {{ scope.row.article && scope.row.article.id }} -
-            {{ scope.row.article && scope.row.article.title }}
+            {{ scope.row.good_info && scope.row.good_info.id }} -
+            {{ scope.row.good_info && scope.row.good_info.name }}
           </template>
         </el-table-column>
         <el-table-column class-name="status-col" label="状态" align="center">
           <template slot-scope="scope">
-            <el-tag :type="scope.row.status | statusFilter">
-              {{ scope.row.status | statusFilterText }}
-            </el-tag>
+            <el-tag :type="scope.row.status | statusFilter">{{
+              scope.row.status | statusFilterText
+            }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center">
+        <el-table-column label="操作" width="350" align="center">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -143,7 +149,7 @@
 </template>
 
 <script>
-import { list, detele, update } from '@/api/comment'
+import { list, detele, update } from '@/api/messagereply'
 
 const hljs = require('highlight.js')
 const md = require('markdown-it')({
@@ -162,12 +168,15 @@ const md = require('markdown-it')({
         console.log(__)
       }
     }
-    return ('<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>')
+
+    return (
+      '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>'
+    )
   }
 })
 
 export default {
-  name: 'CategoryList',
+  name: 'ReplyList',
   filters: {
     statusFilter(status) {
       const statusMap = {
@@ -177,7 +186,7 @@ export default {
       }
       return statusMap[status]
     },
-    // 评论状态：0-审核中,1-审核通过,2-审核不通过
+    // 回复状态：0-审核中,1-审核通过,2-审核不通过
     statusFilterText(status) {
       const statusMap = {
         0: '待审核',
@@ -193,30 +202,26 @@ export default {
       listLoading: true,
       count: 0,
       searchForm: {
-        id: '',
-        article_id: '',
+        user_id: '',
+        good_id: '',
         content: '',
         status: '',
-        page: 1,
-        is_user: 1,
-        is_article: 1
+        page: 1
       }
     }
   },
   mounted() {
-    this.getComment()
+    this.getMessageReply()
+    console.log(this.getCurrentPath())
   },
   methods: {
-    // 跳转创建分类
-    create() {
-      this.$router.push('/category/create')
+    getCurrentPath() {
+      let arr = window.location.href.split('/')
+      let path = arr[arr.length-1]
+      return path
     },
-    // 跳转编辑分类
-    handleEdit(id) {
-      this.$router.push('/comment/edit?id=' + id)
-    },
-    // 获取评论列表
-    async getComment() {
+    // 获取回复列表
+    async getMessageReply() {
       try {
         this.listLoading = true
         const res = await list(this.searchForm)
@@ -229,20 +234,24 @@ export default {
         this.listLoading = false
       }
     },
-    // 更新-审核状态
+    // 跳转编辑
+    handleEdit(id) {
+      this.$router.push('/good/messagereplyedit?id=' + id)
+    },
+    // 更新回复评论-审核状态
     async changeStatus(id, status) {
       await update({
         id: id,
         status
       })
-      await this.getComment()
+      await this.getMessageReply()
       this.$message.success('更新成功')
     },
-    // 删除评论
+    // 删除回复数据
     handleDelete(id) {
       try {
         this.$msgbox
-          .confirm('确定需要删除这个评论吗', '提示', {
+          .confirm('确定需要删除这个回复吗', '提示', {
             confirmButtonText: '删除',
             cancelButtonText: '取消',
             type: 'error'
@@ -250,30 +259,30 @@ export default {
           .then(async() => {
             const r = await detele({ id })
             this.$message.success(r.msg)
-            await this.getComment()
+            await this.getMessageReply()
           })
       } catch (err) {
         this.$message.error(err)
       }
     },
-    // Markdown 语法转换
+    // Markdown语法解析
     mdRender(content) {
       return md.render(content)
     },
-    // 搜索结果
+    // 搜索
     searchData() {
       this.searchForm.page = 1
-      this.getComment()
+      this.getMessageReply()
     },
     // 点击页码
     handleCurrentChange(page) {
       this.searchForm.page = page
-      this.getComment()
+      this.getMessageReply()
     },
     // 重置表单
     resetSearchData() {
       this.$refs['searchForm'].resetFields()
-      this.getComment()
+      this.getMessageReply()
     }
   }
 }

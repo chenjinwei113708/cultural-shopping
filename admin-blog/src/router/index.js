@@ -71,6 +71,18 @@ export const constantRoutes = [
         meta: { title: '文章列表', icon: 'table' }
       },
       {
+        path: 'commentindex',
+        name: 'CommentIndex',
+        component: () => import('@/views/article/commentindex'),
+        meta: { title: '评论列表', icon: 'table' }
+      },
+      {
+        path: 'replyindex',
+        name: 'ReplyIndex',
+        component: () => import('@/views/article/replyindex'),
+        meta: { title: '回复列表', icon: 'table' }
+      },
+      {
         path: 'create',
         name: 'ArticleCreate',
         component: () => import('@/views/article/create'),
@@ -80,6 +92,16 @@ export const constantRoutes = [
         path: 'edit',
         name: 'ArticleEdit',
         component: () => import('@/views/article/edit')
+      },
+      {
+        path: 'commentedit',
+        name: 'CommentEdit',
+        component: () => import('@/views/article/commentedit')
+      },
+      {
+        path: 'replyedit',
+        name: 'ReplyEdit',
+        component: () => import('@/views/article/replyedit')
       }
     ]
   },
@@ -88,14 +110,8 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/good/index',
     name: 'Good',
-    meta: { title: '商品管理', icon: 'el-icon-s-help' },
+    meta: { title: '商品管理', icon: 'el-icon-s-grid' },
     children: [
-      {
-        path: 'index',
-        name: 'GoodIndex',
-        component: () => import('@/views/good/index'),
-        meta: { title: '商品列表', icon: 'table' }
-      },
       {
         path: 'create',
         name: 'GoodCreate',
@@ -103,9 +119,59 @@ export const constantRoutes = [
         meta: { title: '创建商品', icon: 'tree' }
       },
       {
+        path: 'index',
+        name: 'GoodIndex',
+        component: () => import('@/views/good/index'),
+        meta: { title: '商品列表', icon: 'table' }
+      },
+      {
+        path: 'orderindex',
+        name: 'OrderIndex',
+        component: () => import('@/views/good/orderindex'),
+        meta: { title: '订单列表', icon: 'table' }
+      },
+      {
+        path: 'messageindex',
+        name: 'Messageindex',
+        component: () => import('@/views/good/messageindex'),
+        meta: { title: '评论列表', icon: 'table' }
+      },
+      {
+        path: 'messagereplyindex',
+        name: 'Messagereply',
+        component: () => import('@/views/good/messagereplyindex'),
+        meta: { title: '回复列表', icon: 'table' }
+      },
+      {
+        path: 'commentindex',
+        name: 'GoodCommentIndex',
+        component: () => import('@/views/good/commentindex'),
+        meta: { title: '商品评价', icon: 'el-icon-s-comment' }
+      },
+      {
         path: 'edit',
         name: 'GoodEdit',
         component: () => import('@/views/good/edit')
+      },
+      {
+        path: 'orderedit',
+        name: 'OrderEdit',
+        component: () => import('@/views/good/orderedit')
+      },
+      {
+        path: 'commentedit',
+        name: 'CommentEdit',
+        component: () => import('@/views/good/commentedit')
+      },
+      {
+        path: 'messageedit',
+        name: 'Messageedit',
+        component: () => import('@/views/good/messageedit')
+      },
+      {
+        path: 'messagereplyedit',
+        name: 'MessageReplyEdit',
+        component: () => import('@/views/good/messagereplyedit')
       }
     ]
   },
@@ -126,37 +192,6 @@ export const constantRoutes = [
         path: 'edit',
         name: 'UserEdit',
         component: () => import('@/views/user/edit')
-      }
-    ]
-  },
-  {
-    path: '/comment',
-    component: Layout,
-    redirect: '/comment/index',
-    name: 'Comment',
-    meta: { title: '评论管理', icon: 'el-icon-s-help' },
-    children: [
-      {
-        path: 'index',
-        name: 'CommentIndex',
-        component: () => import('@/views/comment/index'),
-        meta: { title: '评论列表', icon: 'table' }
-      }
-    ]
-  },
-
-  {
-    path: '/reply',
-    component: Layout,
-    redirect: '/reply/index',
-    name: 'Reply',
-    meta: { title: '回复管理', icon: 'el-icon-s-help' },
-    children: [
-      {
-        path: 'index',
-        name: 'ReplyIndex',
-        component: () => import('@/views/reply/index'),
-        meta: { title: '回复列表', icon: 'table' }
       }
     ]
   },

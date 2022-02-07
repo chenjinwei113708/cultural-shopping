@@ -1,52 +1,34 @@
 /*
  * @Author: chen
- * @Date: 2022-01-24 13:41:58
- * @LastEditTime: 2022-01-29 21:14:19
+ * @Date: 2022-01-28 21:43:26
+ * @LastEditTime: 2022-02-03 13:50:50
  * @LastEditors: chen
  * @Description: 
- * @FilePath: \cultural-shopping\app\dao\order.js
+ * @FilePath: \cultural-shopping\app\dao\goodcomment.js
  * 
  */
 const { Op, ConnectionTimedOutError, where } = require('sequelize')
 
-const { Order }  = require('@models/order');
 const { isArray, unique } = require('@lib/utils')
 const { User } = require('@models/user')
 const { GoodDetail } = require('@models/gooddetail')
-const { Good } = require('@models/Good')
-const { Category } = require('@models/category');
-
-class OrderDao {
-  // 创建订单
+const { GoodComment } = require('@models/goodcomment');
+const { MessageReply } = require('@models/messagereply');
+class GoodCommentDao {
+  // 创建订单评价
   static async create(v) {
     try {
-      const res = Order.create({
-        img_url: v.get('body.img_url'),
+      const res = GoodComment.create({
+        content: v.get('body.content'),
+        // '评论状态：0-审核中,1-审核通过,2-审核不通过'
+        status: v.get('body.status'),
+        order_id: v.get('body.order_id'),
+        good_id: v.get('body.good_id'),
         user_id: v.get('body.user_id'),
         gooddetail_id:v.get('body.gooddetail_id'),
-        good_num:v.get('body.good_num'),
-        amount:v.get('body.amount'),
-        status:v.get('body.status'),
+        email: v.get('body.email'),
+        score: v.get('body.score')
       })
-      if(v.get('body.status') === 1) {
-        const gooddetail_id = v.get('body.gooddetail_id');
-        const spec = await GoodDetail.findOne({
-          where: {
-            id:gooddetail_id,
-            deleted_at:null
-          },
-          attributes: ['stock_num']
-        });
-        let newstock = spec.stock_num - v.get('body.good_num');
-        await GoodDetail.update({
-          stock_num: newstock
-        },
-        {
-          where: {
-            id:gooddetail_id
-          }
-        });
-      }
       return [null, res]
     } catch(err) {
       return [err, null]
@@ -105,7 +87,7 @@ class OrderDao {
         [Op.in]: ids
       }
     } else {
-      finner.where.id = finner.where
+      finner.where.id = finner.ids
     }
     try {
       if (isArray(ids)) {
@@ -114,12 +96,13 @@ class OrderDao {
         res.forEach(item => {
           goodSpec[item.id] = item
         });
+        // console.log('res--',res)
         data.forEach(item => {
           item.setDataValue('spec_info', goodSpec[item.gooddetail_id] || null)
         })
       } else {
         const res = await GoodDetail.findByPk(ids)
-        data.setDataValue('spec_info',res) 
+        data.setDataValue('spec_info',res)
       }
       return [null, data]
     } catch (err) {
@@ -127,45 +110,53 @@ class OrderDao {
     }
   }
 
-  // 删除订单
+  // 删除订单评论
   static async destroy(id) {
-    const order  = await Order.findOne({
+    const ordercomment  = await GoodComment.findOne({
       where: {
         id,
         deleted_at:null
       }
     });
-    if(!order) {
+    if(!ordercomment) {
       throw new global.errs.NotFound('没有找到相关订单');
     }
     try {
       // 软删除订单
-      const res = order.destroy()
+      const res = ordercomment.destroy()
       return [null, res];
     } catch(err) {
       return [err, null];
     }
   }
 
-  // 获取订单列表
+  // 获取订单评价列表
   static async list(params = {}) {
-    const { user_id, gooddetail_id, page_size = 10, page = 1, status = '' } = params;
+    const { id, user_id, good_id, content, page_size = 10, page = 1, status = '' } = params;
     let filter = {
       deleted_at: null
     };
     // 筛选方式，存在用户id
+    if (id) {
+      filter.id = id;
+    }
     if (user_id) {
       filter.user_id = user_id;
     }
-    if (gooddetail_id) {
-      filter.gooddetail_id = gooddetail_id;
+    if (good_id) {
+      filter.good_id = good_id;
     }
     // 如果要获取全部的订单，就不用传status就可以
     if(status != '') {
       filter.status = status;
     }
+    if (content) {
+      filter.content = {
+        [Op.like]: `%${content}%`
+      };
+    }
     try {
-      const order = await Order.scope('iv').findAndCountAll({
+      const order = await GoodComment.findAndCountAll({
         offset: (page -1) * page_size,
         where: filter,
         order: [
@@ -176,14 +167,14 @@ class OrderDao {
 
       // 添加用户信息
       const userIds = unique(rows.map(item => item.user_id))
-      const [userError, dataAndUser] = await OrderDao._handleUser(rows, userIds)
+      const [userError, dataAndUser] = await GoodCommentDao._handleUser(rows, userIds)
       if (!userError) {
         rows = dataAndUser
       }
 
       // 添加商品信息
       const goodDetailIds = unique(rows.map(item => item.gooddetail_id))
-      const [goodDetailError, dataAndGoodDetail] = await OrderDao._handleSpec(rows, goodDetailIds)
+      const [goodDetailError, dataAndGoodDetail] = await GoodCommentDao._handleSpec(rows, goodDetailIds)
       if (!goodDetailError) {
         rows = dataAndGoodDetail
       }
@@ -205,50 +196,64 @@ class OrderDao {
     }
   }
 
-  // 更新订单
+  // 更新订单评价
   static async update(id, v) {
-    const order = await Order.findByPk(id);
+    const order = await GoodComment.findByPk(id);
     if(!order) {
       throw new global.errs.NotFound('没有找到相关商品');
     }
     try {
-      const res = await Order.update(
-        {
-          status: v.get('body.status'),
-          amount: v.get('body.amount'),
-          good_num: v.get('body.good_num'),
-          hascomment: v.get('body.good_num') || 0
-        },
-        {
-          where: {
-            id
+      let content = v.get('body.content')
+      let res = ''
+      if(content) {
+          res = await GoodComment.update(
+          {
+            status: v.get('body.status'),
+            content: v.get('body.content')
+          },
+          {
+            where: {
+              id
+            }
           }
-        }
-      )
+        )
+      } else {
+          res = await GoodComment.update(
+          {
+            status: v.get('body.status'),
+          },
+          {
+            where: {
+              id
+            }
+          }
+        )
+      }
+      
       return [null, res]
     } catch(err) {
       return [err, null]
     }
   }
 
-  // 获取订单详情
+  // 获取订单评价详情
   static async detail(id) {
     try {
       let filter = {
         id,
         deleted_at: null
       }
-      let order = await Order.findOne({
+      let order = await GoodComment.findOne({
         where: filter
       })
       // 添加用户信息
-      const [userError, dataAndUser] = await OrderDao._handleUser(order, order.user_id)
-      if (!userError) {
+      const [userError, dataAndUser] = await GoodCommentDao._handleUser(order, order.user_id)
+      if (!userError) { 
         order = dataAndUser
       }
 
       // 添加商品信息
-      const [goodDetailError, dataAndGoodDetail] = await OrderDao._handleSpec(order, order.gooddetail_id)
+      const [goodDetailError, dataAndGoodDetail] = await GoodCommentDao._handleSpec(order, order.gooddetail_id)
       if (!goodDetailError) {
         order = dataAndGoodDetail
       }
@@ -260,5 +265,5 @@ class OrderDao {
 }
 
 module.exports = {
-  OrderDao
+  GoodCommentDao
 }

@@ -1,3 +1,12 @@
+<!--
+ * @Author: chen
+ * @Date: 2022-01-29 12:00:24
+ * @LastEditTime: 2022-01-29 20:43:00
+ * @LastEditors: chen
+ * @Description:
+ * @FilePath: \cultural-shopping\admin-blog\src\views\good\commentindex.vue
+ *
+-->
 <template>
   <div class="category">
     <div class="search">
@@ -7,24 +16,24 @@
         :model="searchForm"
         inline
       >
-        <el-form-item label="回复ID" prop="user_id">
+        <el-form-item label="评论ID" prop="id">
           <el-input
-            v-model.trim="searchForm.user_id"
-            placeholder="回复ID"
+            v-model.trim="searchForm.id"
+            placeholder="评论ID"
             class="input"
             clearable
           />
         </el-form-item>
-        <el-form-item label="文章ID" prop="article_id">
+        <el-form-item label="商品ID" prop="good_id">
           <el-input
-            v-model.trim="searchForm.article_id"
-            placeholder="文章ID"
+            v-model.trim="searchForm.good_id"
+            placeholder="商品ID"
             class="input"
             clearable
           />
         </el-form-item>
 
-        <el-form-item label="分类状态：" prop="status">
+        <el-form-item label="状态：" prop="status">
           <el-select
             v-model="searchForm.status"
             placeholder="请选择状态"
@@ -36,10 +45,10 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="分类名称" prop="content">
+        <el-form-item label="评论内容" prop="content">
           <el-input
             v-model.trim="searchForm.content"
-            placeholder="回复内容"
+            placeholder="评论内容"
             class="input"
             clearable
           />
@@ -51,9 +60,6 @@
           </el-button>
           <el-button type="primary" size="medium" @click="resetSearchData">
             重置
-          </el-button>
-          <el-button type="primary" size="medium" @click="create">
-            新增分类
           </el-button>
         </el-form-item>
       </el-form>
@@ -70,33 +76,33 @@
       >
         <el-table-column label="ID" width="80" align="center">
           <template slot-scope="scope">
-            {{ scope.row.user_id }}
+            {{ scope.row.id }}
           </template>
         </el-table-column>
-        <el-table-column label="回复内容">
+        <el-table-column label="评论内容">
           <template slot-scope="scope">
             <div v-html="mdRender(scope.row.content)" />
           </template>
         </el-table-column>
-        <el-table-column label="回复人信息" align="center">
+        <el-table-column label="评论人信息" align="center">
           <template slot-scope="scope">
             {{ scope.row.user_info || "匿名" }}
           </template>
         </el-table-column>
-        <el-table-column label="回复文章" align="center">
+        <el-table-column label="评论商品" align="center">
           <template slot-scope="scope">
-            {{ scope.row.article && scope.row.article[0].id }} -
-            {{ scope.row.article && scope.row.article[0].title }}
+            {{ "id：" + scope.row.good_id }}  规格：
+            {{ scope.row.spec_info && scope.row.spec_info.spec_name }}
           </template>
         </el-table-column>
         <el-table-column class-name="status-col" label="状态" align="center">
           <template slot-scope="scope">
-            <el-tag :type="scope.row.status | statusFilter">{{
-              scope.row.status | statusFilterText
-            }}</el-tag>
+            <el-tag :type="scope.row.status | statusFilter">
+              {{ scope.row.status | statusFilterText }}
+            </el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center">
+        <el-table-column label="操作" width="350" align="center">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -129,7 +135,7 @@
         </el-table-column>
       </el-table>
 
-      <div class="pagination">
+      <!-- <div class="pagination">
         <el-pagination
           background
           :current-page.sync="searchForm.page"
@@ -137,13 +143,13 @@
           :total="count"
           @current-change="handleCurrentChange"
         />
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
 
 <script>
-import { list, detele, update } from '@/api/reply'
+import { list, detele, update } from '@/api/goodcomment'
 
 const hljs = require('highlight.js')
 const md = require('markdown-it')({
@@ -162,15 +168,12 @@ const md = require('markdown-it')({
         console.log(__)
       }
     }
-
-    return (
-      '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>'
-    )
+    return ('<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>')
   }
 })
 
 export default {
-  name: 'ReplyList',
+  name: 'GoodCommentIndex',
   filters: {
     statusFilter(status) {
       const statusMap = {
@@ -180,7 +183,7 @@ export default {
       }
       return statusMap[status]
     },
-    // 回复状态：0-审核中,1-审核通过,2-审核不通过
+    // 评论状态：0-审核中,1-审核通过,2-审核不通过
     statusFilterText(status) {
       const statusMap = {
         0: '待审核',
@@ -196,56 +199,72 @@ export default {
       listLoading: true,
       count: 0,
       searchForm: {
-        user_id: '',
-        article_id: '',
+        id: '',
+        good_id: '',
         content: '',
         status: '',
-        page: 1,
-        is_user: 1,
-        is_article: 1
+        page: 1
       }
     }
   },
   mounted() {
-    this.getReply()
+    this.getGoodComment()
   },
   methods: {
-    // 跳转创建分类
-    create() {
-      this.$router.push('/category/create')
-    },
-    // 获取回复列表
-    async getReply() {
+    // 获取商品评论列表
+    async getGoodComment() {
       try {
         this.listLoading = true
         const res = await list(this.searchForm)
-        console.log(res)
         this.list = res.data.data
         this.count = res.data.meta.count
+        console.log('list---', this.list)
       } catch (err) {
         console.log(err)
       } finally {
         this.listLoading = false
       }
     },
-    // 跳转编辑
-    handleEdit(id) {
-      this.$router.push('/comment/edit?id=' + id)
+    // Markdown 语法转换
+    mdRender(content) {
+      return md.render(content)
     },
-    // 更新回复评论-审核状态
+    // 搜索
+    searchData() {
+      this.searchForm.page = 1
+      this.getGoodComment()
+    },
+    // 点击页码
+    handleCurrentChange(page) {
+      this.searchForm.page = page
+      this.getGoodComment()
+    },
+    // 重置表单
+    resetSearchData() {
+      this.$refs['searchForm'].resetFields()
+      this.getGoodComment()
+    },
+    // 更新-审核状态
     async changeStatus(id, status) {
       await update({
         id: id,
         status
       })
-      await this.getReply()
+      await this.getGoodComment()
       this.$message.success('更新成功')
     },
-    // 删除回复数据
+
+    // 跳转编辑分类
+    handleEdit(id) {
+      this.$router.push('/good/commentedit?id=' + id)
+      console.log('评论编辑')
+    },
+
+    // 删除评论
     handleDelete(id) {
       try {
         this.$msgbox
-          .confirm('确定需要删除这个回复吗', '提示', {
+          .confirm('确定需要删除这个评论吗', '提示', {
             confirmButtonText: '删除',
             cancelButtonText: '取消',
             type: 'error'
@@ -253,30 +272,11 @@ export default {
           .then(async() => {
             const r = await detele({ id })
             this.$message.success(r.msg)
-            await this.getReply()
+            await this.getGoodComment()
           })
       } catch (err) {
         this.$message.error(err)
       }
-    },
-    // Markdown语法解析
-    mdRender(content) {
-      return md.render(content)
-    },
-    // 搜索
-    searchData() {
-      this.searchForm.page = 1
-      this.getReply()
-    },
-    // 点击页码
-    handleCurrentChange(page) {
-      this.searchForm.page = page
-      this.getReply()
-    },
-    // 重置表单
-    resetSearchData() {
-      this.$refs['searchForm'].resetFields()
-      this.getReply()
     }
   }
 }
@@ -295,96 +295,5 @@ export default {
   display: flex;
   justify-content: center;
   margin: 24px 0;
-}
-</style>
-<style>
-/*highlight.js*/
-/*Syntax highlighting for the Web*/
-pre {
-  padding: 1em;
-}
-pre code.hljs {
-  display: block;
-  overflow-x: auto;
-  padding: 1em;
-}
-
-code.hljs {
-  padding: 3px 5px;
-}
-
-.hljs {
-  color: #abb2bf;
-  background: #282c34;
-}
-
-.hljs-comment,
-.hljs-quote {
-  color: #5c6370;
-  font-style: italic;
-}
-
-.hljs-doctag,
-.hljs-formula,
-.hljs-keyword {
-  color: #c678dd;
-}
-
-.hljs-deletion,
-.hljs-name,
-.hljs-section,
-.hljs-selector-tag,
-.hljs-subst {
-  color: #e06c75;
-}
-
-.hljs-literal {
-  color: #56b6c2;
-}
-
-.hljs-addition,
-.hljs-attribute,
-.hljs-meta .hljs-string,
-.hljs-regexp,
-.hljs-string {
-  color: #98c379;
-}
-
-.hljs-attr,
-.hljs-number,
-.hljs-selector-attr,
-.hljs-selector-class,
-.hljs-selector-pseudo,
-.hljs-template-variable,
-.hljs-type,
-.hljs-variable {
-  color: #d19a66;
-}
-
-.hljs-bullet,
-.hljs-link,
-.hljs-meta,
-.hljs-selector-id,
-.hljs-symbol,
-.hljs-title {
-  color: #61aeee;
-}
-
-.hljs-built_in,
-.hljs-class .hljs-title,
-.hljs-title.class_ {
-  color: #e6c07b;
-}
-
-.hljs-emphasis {
-  font-style: italic;
-}
-
-.hljs-strong {
-  font-weight: 700;
-}
-
-.hljs-link {
-  text-decoration: underline;
 }
 </style>

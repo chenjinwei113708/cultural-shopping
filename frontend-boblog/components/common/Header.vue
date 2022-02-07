@@ -69,11 +69,11 @@ export default {
       if (this.isLoginStatus) {
         this.nav.splice(2, 0, {
           title: '个人中心',
-          router: '/usercenter',
+          router: '/usercenter/cart',
         })
       } else {
         const index = this.nav.findIndex(
-          (item) => item.router === '/usercenter'
+          (item) => item.router === '/usercenter/cart'
         )
         if (index !== -1) {
           this.nav.splice(index, 1)

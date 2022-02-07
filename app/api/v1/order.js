@@ -1,7 +1,7 @@
 /*
  * @Author: chen
  * @Date: 2022-01-24 14:11:12
- * @LastEditTime: 2022-01-24 22:38:59
+ * @LastEditTime: 2022-01-27 16:24:46
  * @LastEditors: chen
  * @Description: 
  * @FilePath: \cultural-shopping\app\api\v1\order.js
@@ -74,6 +74,23 @@ router.get('/order',async (ctx) => {
   }
 });
 
+/**
+ * 获取订单详情
+ */
+router.get('/order/:id', async (ctx) => {
+  // 通过校验器校验参数是否通过
+  const v = await new PositiveIdParamsValidator().validate(ctx);
+  // 获取商品ID参数
+  const id = v.get('path.id');
+  // 查询商品
+  const [err, data] = await OrderDao.detail(id);
+  if(!err) {
+    ctx.response.status = 200;
+    ctx.body = res.json(data);
+  } else {
+    ctx.body = res.fail(err);
+  }
+})
 /**
  * 更新订单（主要更新订单状态）
  */

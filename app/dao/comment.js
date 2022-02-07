@@ -50,7 +50,7 @@ class CommentDao {
   static async detail(id, query) {
     const { is_replay = 0, is_article = 0, is_user = 0 } = query
     try {
-      let comment = await Comment.scope('iv').findOne({
+      let comment = await Comment.scope('bh').findOne({
         where: {
           id,
           deleted_at: null

@@ -1,7 +1,7 @@
 /*
  * @Author: chen
  * @Date: 2022-01-17 16:34:13
- * @LastEditTime: 2022-01-25 11:22:12
+ * @LastEditTime: 2022-02-04 13:46:24
  * @LastEditors: chen
  * @Description: 
  * @FilePath: \cultural-shopping\app\dao\good.js
@@ -158,9 +158,9 @@ class GoodDao {
         const res = await GoodDetail.findAll(finner)
         data.setDataValue('spec_info', res)
       }
-        return [null, data]
+      return [null, data]
     } catch(err) {
-        return [err, null]
+      return [err, null]
     }
   }
 

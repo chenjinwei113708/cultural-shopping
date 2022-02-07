@@ -1,10 +1,10 @@
 /*
  * @Author: chen
  * @Date: 2021-12-24 15:13:42
- * @LastEditTime: 2022-01-04 10:29:45
+ * @LastEditTime: 2022-02-05 14:34:01
  * @LastEditors: chen
  * @Description: 
- * @FilePath: \frontend-boblog\store\user.js
+ * @FilePath: \cultural-shopping\frontend-boblog\store\user.js
  * 
  */
 import { login, register, info, update } from '@/request/api/user'
@@ -41,6 +41,9 @@ const actions = {
         id: user.user_id,
         username: user.username,
         email: user.email,
+        address: user.address,
+        phone: user.phone,
+        recipient_name: user.recipient_name,
         star: user.star,
         like: user.like
       })
@@ -59,6 +62,9 @@ const actions = {
         id: user.user_id,
         username: user.username,
         email: user.email,
+        address: user.address,
+        phone: user.phone,
+        recipient_name: user.recipient_name,
         star: user.star,
         like: user.like
       })
@@ -82,6 +88,9 @@ const actions = {
         id: user.user_id,
         username: user.username,
         email: user.email,
+        address: user.address,
+        phone: user.phone,
+        recipient_name: user.recipient_name,
         star: user.star,
         like: user.like
       })
@@ -99,6 +108,9 @@ const actions = {
         id: user.user_id,
         username: user.username,
         email: user.email,
+        address: user.address,
+        phone: user.phone,
+        recipient_name: user.recipient_name,
         star: user.star,
         like: user.like
       })

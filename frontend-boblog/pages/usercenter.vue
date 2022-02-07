@@ -1,65 +1,66 @@
+<!--
+ * @Author: chen
+ * @Date: 2022-01-26 10:53:39
+ * @LastEditTime: 2022-01-28 13:56:57
+ * @LastEditors: chen
+ * @Description: 
+ * @FilePath: \cultural-shopping\frontend-boblog\pages\usercenter.vue
+ * 
+-->
 <template>
-  <div>
-    <div v-if="userInfo" class="userinfo">
-      <p>昵称：{{ userInfo.username }}</p>
-      <p>邮箱：{{ userInfo.email }}</p>
-      <p style="text-indent: 2em">
-        —— 生活就像海洋，只有意志坚强的人，才能到达彼岸。 
-      </p>
-      <el-button @click="logout"> 退出登录 </el-button>
-
-      <div
-        v-if="Array.isArray(commentList) && commentList.length > 0"
-        class="comment"
-      >
-        <h2>评论列表：</h2>
-        <ul class="comment-list">
-          <li v-for="item in commentList" :key="item.id" class="comment-item">
-            <p>文章：{{ item.article.title }}</p>
-            <p>评论内容：{{ item.content }}</p>
-            <p>评论时间：{{ item.created_at }}</p>
-            <p>回复：{{ item.reply_list || '无' }}</p>
-          </li>
-        </ul>
-        <div class="pagination">
-          <el-pagination
-            background
-            :current-page.sync="page"
-            layout="total, prev, pager, next"
-            :total="count"
-            @current-change="handleCurrentChange"
-          />
-        </div>
+  <div class="container">
+    <div v-if="isLoginStatus" class="usercenter-container">
+      <div class="left">
+        <nuxt-link :class="{link: true, selected:curPath==='/usercenter/cart'}" to='/usercenter/cart'>购物车</nuxt-link>
+        <nuxt-link :class="{link: true, selected:curPath==='/usercenter/order'}" to='/usercenter/order'>订单中心</nuxt-link>
+        <nuxt-link :class="{link: true, selected:curPath==='/usercenter/user'}" to='/usercenter/user'>个人中心</nuxt-link>
       </div>
+      <div class="right">
+        <nuxt-child></nuxt-child>
+      </div>
+    </div>
+    <div v-else>
+      <el-dialog
+        :visible.sync="isLogin"
+        width="880px"
+        top="0"
+        :lock-scroll="true"
+        :before-close="handleClose"
+      >
+        <LoginForm @on-success="loginFormSuccess" />
+      </el-dialog>
     </div>
   </div>
 </template>
 
 <script>
+import LoginForm from '@/components/common/LoginForm'
 import { mapState } from 'vuex'
-import { getCommentTarget } from '@/request/api/comment'
-import { removeToken } from '@/lib/auth'
 
 export default {
-  name: 'User',
+  name: 'Usercenter',
+  components: {
+    LoginForm
+  },
   data() {
     return {
-      page: 1,
-      count: 0,
-      commentList: [],
+      isLogin: false
     }
   },
   computed: {
     ...mapState({
       userInfo: (state) => state.user.userInfo,
+      isLoginStatus: (state) => state.user.isLoginStatus,
     }),
+    curPath() {
+      return this.$route.path
+    }
   },
-  async fetch({ store }) {
-    await store.dispatch('category/getCategoryData')
-  },
+
+  // eslint-disable-next-line vue/order-in-components
   head() {
     return {
-      title: '民俗文化 - 在线购物',
+      title: '民俗文化 - 在线购物  - 个人中心',
       meta: [
         {
           name: 'keywords',
@@ -74,48 +75,86 @@ export default {
     }
   },
   mounted() {
-    this.getComment()
+    this.init()
   },
   methods: {
-    // 退出登录
-    logout() {
-      removeToken()
-      this.$store.commit('user/SET_LOGIN_STATUS', false)
-      this.$store.commit('user/SET_USERINFO', null)
-      this.$router.push('/')
-    },
-    async getComment() {
-      const uid = this.userInfo && this.userInfo.id
-      const [err, res] = await getCommentTarget({
-        user_id: uid,
-        is_replay: 1,
-        is_article: 1,
-        page: this.page,
-      })
-      if (!err) {
-        this.isLoad = true
-        this.commentList = res.data.data.data
-        this.count = res.data.data.meta.count
+    init() {
+      if(!this.isLoginStatus) {
+        this.isLogin = true
+      } else {
+        this.isLogin = false
       }
     },
-    // 点击数字
-    async handleCurrentChange(page) {
-      this.page = page
-      await this.getComment()
-      this.$scrollTo(0)
+    handleClose() {
+      this.isLogin = false
     },
+    loginFormSuccess() {
+      this.isLogin = false
+    }
   },
 }
 </script>
 
 <style scoped lang="scss">
-.userinfo {
-  width: 1024px;
-  margin: 32px auto;
-  font-size: 14px;
+.container {
+  margin-bottom: 200px;
 }
-.comment-item {
-  padding: 20px 0;
-  border-bottom: 1px solid #f0f0f0;
+.usercenter-container {
+  margin: 32px auto 60px;
+  width: 1280px;
+  height: 700px;
+  box-sizing: border-box;
+
+  .left {
+    float:left;
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: column;
+    width: 200px;
+    height: 160px;
+    // border: 1px solid #cacacc;
+  }
+
+  .right {
+    box-sizing: border-box;
+    flex: 1;
+    margin-left: 220px;
+    height: 100%;
+    // border: 1px solid #cacacc;
+  }
+}
+.link {
+  margin: auto auto;
+  padding: 0 35px;
+  border-left: 4px solid transparent;
+  width: 120px;
+  // height: 47.63px;
+  // line-height: 47.63px;
+  height: 30px;
+  line-height: 30px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #7d7d7d;
+  text-align: left;
+  text-decoration-line: none;
+}
+.selected{
+  border-left: 4px solid #b4a078;
+  color:#b4a078;
+}
+
+/deep/ .el-dialog__header {
+  padding: 0;
+}
+/deep/ .el-dialog__body {
+  padding: 0;
+}
+/deep/ .el-dialog {
+  margin: 0;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 </style>
+

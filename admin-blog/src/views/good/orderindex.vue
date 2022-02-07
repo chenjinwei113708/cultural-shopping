@@ -7,44 +7,33 @@
         :model="searchForm"
         inline
       >
-        <el-form-item label="商品ID" prop="id">
+        <el-form-item label="用户ID" prop="user_id">
           <el-input
-            v-model.trim="searchForm.id"
-            placeholder="商品ID"
+            v-model.trim="searchForm.user_id"
+            placeholder="用户ID"
             class="input"
             clearable
           />
         </el-form-item>
-
-        <el-form-item label="商品状态：" prop="status">
+        <el-form-item label="商品规格ID" prop="gooddetail_id">
+          <el-input
+            v-model.trim="searchForm.gooddetail_id"
+            placeholder="商品规格ID"
+            class="input"
+            clearable
+          />
+        </el-form-item>
+        <el-form-item label="订单状态：" prop="status">
           <el-select
             v-model="searchForm.status"
             placeholder="请选择状态"
             clearable
           >
-            <el-option label="隐藏" value="0" />
-            <el-option label="正常" value="1" />
+            <el-option label="未付款" value="0" />
+            <el-option label="已付款未发货" value="1" />
+            <el-option label="已发货未确认收到" value="2" />
+            <el-option label="确认到货订单完成" value="3" />
           </el-select>
-        </el-form-item>
-
-        <el-form-item label="分类" prop="article_id">
-          <el-select v-model="searchForm.article" placeholder="请选择分类">
-            <el-option
-              v-for="item in articleList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="商品名称" prop="name">
-          <el-input
-            v-model.trim="searchForm.name"
-            placeholder="商品名称"
-            class="input"
-            clearable
-          />
         </el-form-item>
 
         <el-form-item>
@@ -53,9 +42,6 @@
           </el-button>
           <el-button type="primary" size="medium" @click="resetSearchData">
             重置
-          </el-button>
-          <el-button type="primary" size="medium" @click="create">
-            新增商品
           </el-button>
         </el-form-item>
       </el-form>
@@ -75,9 +61,9 @@
             {{ scope.row.id }}
           </template>
         </el-table-column>
-        <el-table-column label="商品标题" width="150" align="center">
+        <el-table-column label="订单用户" width="150" align="center">
           <template slot-scope="scope">
-            {{ scope.row.name }}
+            {{ scope.row.user_info.username }}
           </template>
         </el-table-column>
         <el-table-column label="商品图片" align="center">
@@ -85,14 +71,19 @@
             <img :src="scope.row.img_url" width="80" height="80" alt="">
           </template>
         </el-table-column>
-        <el-table-column label="作者" width="80" align="center">
+        <el-table-column label="商品名称" align="center">
           <template slot-scope="scope">
-            {{ scope.row.admin_info.nickname }}
+            {{ scope.row.spec_info.spec_name }}
           </template>
         </el-table-column>
-        <el-table-column label="文章" align="center">
+        <el-table-column label="商品数量" align="center">
           <template slot-scope="scope">
-            {{ scope.row.article_info.title }}
+            {{ scope.row.good_num }}
+          </template>
+        </el-table-column>
+        <el-table-column label="订单金额" align="center">
+          <template slot-scope="scope">
+            {{ scope.row.amount }}
           </template>
         </el-table-column>
         <el-table-column label="创建时间" align="center">
@@ -100,11 +91,7 @@
             {{ scope.row.created_at }}
           </template>
         </el-table-column>
-        <el-table-column label="商品描述" align="center">
-          <template slot-scope="scope">
-            {{ scope.row.desc }}
-          </template>
-        </el-table-column>
+
         <el-table-column class-name="status-col" label="状态" align="center">
           <template slot-scope="scope">
             <el-tag :type="scope.row.status | statusFilter">{{
@@ -142,66 +129,64 @@
 </template>
 
 <script>
-import { list, detele } from '@/api/good'
-import { list as getArticleList } from '@/api/article'
+import { list, detele } from '@/api/order'
+import { list as getCategoryList } from '@/api/category'
 
 export default {
-  name: 'GoodList',
+  name: 'OrderList',
   filters: {
-    // 状态选择
     statusFilter(status) {
       const statusMap = {
-        0: 'danger',
-        1: 'success'
+        0: 'info',
+        1: '',
+        2: 'warning',
+        3: 'success'
       }
       return statusMap[status]
     },
-    // 状态选择显示的文字
     statusFilterText(status) {
       const statusMap = {
-        0: '隐藏',
-        1: '正常'
+        0: '未付款',
+        1: '已付款未发货',
+        2: '已发货',
+        3: '订单完成'
       }
       return statusMap[status]
     }
   },
   data() {
     return {
-      articleList: [],
+      categoryList: [],
       list: null,
       listLoading: true,
       count: 0,
       searchForm: {
-        id: '',
-        name: '',
+        user_id: '',
+        gooddetail_id: '',
         status: '',
-        page: 1,
-        article_id: ''
+        page: 1
       }
     }
   },
   mounted() {
-    this.getArticleList()
+    this.getOrderList()
     this.getCategoryList()
   },
   methods: {
-    create() {
-      this.$router.push('/good/create')
-    },
     // 获取分类列表
     async getCategoryList() {
       try {
         this.listLoading = true
-        const res = await getArticleList()
-        this.articleList = res.data.data
+        const res = await getCategoryList()
+        this.categoryList = res.data.data
       } catch (err) {
         console.log(err)
       } finally {
         this.listLoading = false
       }
     },
-    // 获取商品列表
-    async getArticleList() {
+    // 获取订单列表
+    async getOrderList() {
       try {
         this.listLoading = true
         const res = await list(this.searchForm)
@@ -213,23 +198,22 @@ export default {
         this.listLoading = false
       }
     },
-    // 商品编辑
+    // 订单编辑
     handleEdit(id) {
-      this.$router.push('/good/edit?id=' + id)
+      this.$router.push('/good/orderedit?id=' + id)
     },
-    // 删除商品
+    // 删除订单
     handleDelete(id) {
       try {
         this.$msgbox
-          .confirm('确定需要删除这个商品吗', '提示', {
+          .confirm('确定需要删除这个订单吗', '提示', {
             confirmButtonText: '删除',
             cancelButtonText: '取消',
             type: 'error'
           })
           .then(async() => {
-            const r = await detele({ id })
-            this.$message.success(r.msg)
-            await this.getArticleList()
+            await detele({ id })
+            await this.getOrderList()
           })
       } catch (err) {
         this.$message.error(err)
@@ -238,17 +222,17 @@ export default {
     // 搜索
     searchData() {
       this.searchForm.page = 1
-      this.getArticleList()
+      this.getOrderList()
     },
     // 点击页码
     handleCurrentChange(page) {
       this.searchForm.page = page
-      this.getArticleList()
+      this.getOrderList()
     },
     // 重置表单
     resetSearchData() {
       this.$refs['searchForm'].resetFields()
-      this.getArticleList()
+      this.getOrderList()
     }
   }
 }
@@ -267,5 +251,10 @@ export default {
   display: flex;
   justify-content: center;
   margin: 24px 0;
+}
+status-col {
+  overflow: none;
+  text-overflow: none;
+
 }
 </style>
